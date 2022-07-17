@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
   sequelize.define(
     "recipe",
     {
-      name: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
       idname: {
         type: DataTypes.VIRTUAL,
         get() {
-          return `${this.id}  ${this.name}`;
+          return `${this.id}${this.title}`;
         },
       },
     },

@@ -148,13 +148,13 @@ Se debe desarrollar una aplicación de React/Redux que contenga las siguientes p
 
 El modelo de la base de datos deberá tener las siguientes entidades (Aquellas propiedades marcadas con asterisco deben ser obligatorias):
 
-- [ ] Receta con las siguientes propiedades:
+- [*] Receta con las siguientes propiedades:
   - ID: \*
   - Nombre \*
   - Resumen del plato \*
   - Nivel de "comida saludable" (health score)
   - Paso a paso
-- [ ] Tipo de dieta con las siguientes propiedades:
+- [*] Tipo de dieta con las siguientes propiedades:
   - ID
   - Nombre
 
@@ -168,7 +168,7 @@ Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
 
 **IMPORTANTE**: No está permitido utilizar los filtrados, ordenamientos y paginados brindados por la API externa, todas estas funcionalidades tienen que implementarlas ustedes.
 
-- [ ] **GET /recipes?name="..."**:
+- [*] **GET /recipes?name="..."**:
   - Obtener un listado de las recetas que contengan la palabra ingresada como query parameter
   - Si no existe ninguna receta mostrar un mensaje adecuado
 - [ ] **GET /recipes/{idReceta}**:
