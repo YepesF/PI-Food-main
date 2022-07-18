@@ -168,7 +168,7 @@ Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
 
 **IMPORTANTE**: No está permitido utilizar los filtrados, ordenamientos y paginados brindados por la API externa, todas estas funcionalidades tienen que implementarlas ustedes.
 
-- [*] **GET /recipes?name="..."**:
+- [*] **GET /recipes?name="..."**: **TODO** Es necesario que el resultado sea en orden?
   - Obtener un listado de las recetas que contengan la palabra ingresada como query parameter
   - Si no existe ninguna receta mostrar un mensaje adecuado
 - [ ] **GET /recipes/{idReceta}**:

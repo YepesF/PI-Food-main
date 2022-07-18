@@ -8,7 +8,8 @@ const { Recipe } = require("../db");
 const { API_KEY } = process.env;
 const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY}`;
 
-const respuestaAPI = require("../../../complexSearch.json");
+const respuestaAPI = require("../../../complexSearch.json"),
+  respuestaID = require("../../../information.json");
 
 router.get("/", async (req, res) => {
   const { name } = req.query;
@@ -63,17 +64,42 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/idReceta:", async (req, res) => {
+router.get("/:idReceta", async (req, res) => {
   const { idReceta } = req.params;
 
-  try {
-    const recipes = respuestaAPI.results;
+  // await Recipe.create({ title: "Tomato", sumary: "1, 2, 3" });
 
-    console.log(recipes);
+  try {
+    // let recipe;
+    const recipe = respuestaID;
+    // res.json(recipe);
+
+    // const recipe = await axios
+    //   .get(
+    //     `https://api.spoonacular.com/recipes/${Number(
+    //       idReceta
+    //     )}/information?apiKey=${API_KEY}`
+    //   )
+    //   .then((response) => response.data);
+
+    console.log(!recipe);
+
+    if (!recipe) {
+      const queryBD = await Recipe.findByPk(Number(idReceta));
+
+      if (!queryBD)
+        return res
+          .status(404)
+          .send(
+            `No puedimos encontrar ninguna receta con el ID ${Number(idReceta)}`
+          );
+      return res.json(queryBD);
+    }
+
+    res.json(recipe);
   } catch (error) {
-    res
-      .status(400)
-      .send(`Error durante la ejecucion por favor intente nuevamente`);
+    res.status(400).send(error.message);
+    // .send(`Error durante la ejecucion por favor intente nuevamente`);
   }
 });
 
