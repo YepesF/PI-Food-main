@@ -11,11 +11,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         unique: true,
       },
-      sumary: {
+      summary: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      healthscore: {
+      healthScore: {
         type: DataTypes.INTEGER,
         validate: {
           isEvent(value) {
@@ -27,7 +27,16 @@ module.exports = (sequelize) => {
           },
         },
       },
-      steps: {
+      analyzedInstructions: {
+        type: DataTypes.ARRAY(DataTypes.JSON),
+      },
+      image: {
+        type: DataTypes.TEXT,
+        validate: {
+          isUrl: true,
+        },
+      },
+      dishTypes: {
         type: DataTypes.ARRAY(DataTypes.TEXT),
       },
       idname: {
