@@ -67,8 +67,8 @@ router.get("/:idReceta", async (req, res) => {
   // [] Paso a paso
 
   try {
-    // let recipeAPI;
-    let recipeAPI = respuestaID;
+    let recipeAPI;
+    // let recipeAPI = respuestaID;
 
     // const recipeAPI = await axios
     //   .get(
@@ -79,7 +79,9 @@ router.get("/:idReceta", async (req, res) => {
     //   .then((response) => response.data);
 
     if (!recipeAPI) {
-      var recipeBD = await Recipe.findByPk(Number(idReceta));
+      var recipeBD = await Recipe.findByPk(Number(idReceta), {
+        include: Diet,
+      });
 
       if (!recipeBD)
         return res
@@ -112,6 +114,48 @@ router.get("/:idReceta", async (req, res) => {
     res.status(400).send(error.message);
     // .send(`Error durante la ejecucion por favor intente nuevamente`);
   }
+});
+
+router.post("/", async (req, res) => {
+  // [ ] Un formulario controlado con JavaScript con los siguientes campos:
+  // Nombre
+  // Resumen del plato
+  // Nivel de "comida saludable" (health score)
+  // Paso a paso
+  // [ ] Posibilidad de seleccionar/agregar uno o más tipos de dietas
+  // [ ] Botón/Opción para crear una nueva receta
+  const { title, summary, healthScore, analyzedInstructions, diets } = req.body;
+
+  if (!title) return res.status(400).send(`El valor 'title' es requerido`);
+  if (!summary) return res.status(400).send(`El valor 'sumary' es requerido`);
+  if (healthScore > 100 || healthScore < 0)
+    return res
+      .status(400)
+      .send(`El valor 'healthScore' no puede ser mayor que 100 ni menor que 0`);
+
+  const newRecipe = await Recipe.create({
+    title,
+    summary,
+    healthScore,
+    analyzedInstructions,
+  });
+
+  // const diet = await Diet.findAll({
+  //   where: {
+  //     name: "Low FODMAP",
+  //   },
+  // });
+
+  await newRecipe.addDiet({ through: { name: "Low FODMAP" } });
+
+  const recipe = await Recipe.findAll({
+    where: {
+      title,
+    },
+    include: Diet,
+  });
+
+  res.json(recipe);
 });
 
 module.exports = router;

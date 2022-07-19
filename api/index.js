@@ -24,21 +24,8 @@ const { conn, Recipe, Diet } = require("./src/db.js");
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
   server.listen(3001, async () => {
-    //Precarga Diets
-    await Diet.create({ name: "Gluten Free" });
-    await Diet.create({ name: "Ketogenic" });
-    await Diet.create({ name: "Vegetarian" });
-    await Diet.create({ name: "Lacto-Vegetarian" });
-    await Diet.create({ name: "Ovo-Vegetarian" });
-    await Diet.create({ name: "Vegan" });
-    await Diet.create({ name: "Pescetarian" });
-    await Diet.create({ name: "Paleo" });
-    await Diet.create({ name: "Primal" });
-    await Diet.create({ name: "Low FODMAP" });
-    await Diet.create({ name: "Whole30" });
-
     //Precarga Recipes
-    await Recipe.create({
+    const recipeTomato = await Recipe.create({
       title: "Tomato",
       summary: "1, 2, 3",
       healthScore: 76,
@@ -58,6 +45,24 @@ conn.sync({ force: true }).then(() => {
       image: "https://spoonacular.com/recipeImages/716426-556x370.jpg",
       dishTypes: ["side dish"],
     });
+
+    //Precarga Diets
+    await Promise.all([
+      Diet.create({ name: "Gluten Free" }),
+      Diet.create({ name: "Ketogenic" }),
+      Diet.create({ name: "Vegetarian" }),
+      Diet.create({ name: "Lacto-Vegetarian" }),
+      Diet.create({ name: "Ovo-Vegetarian" }),
+      Diet.create({ name: "Vegan" }),
+      Diet.create({ name: "Pescetarian" }),
+      Diet.create({ name: "Paleo" }),
+      Diet.create({ name: "Primal" }),
+      Diet.create({ name: "Low FODMAP" }),
+      Diet.create({ name: "Whole30" }),
+      recipeTomato.setDiets([1, 2, 3]),
+      recipeTomato.addDiets([4, 5]),
+    ]);
+
     console.log("%s listening at 3001"); // eslint-disable-line no-console
   });
 });
