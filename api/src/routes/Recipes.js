@@ -140,15 +140,17 @@ router.post("/", async (req, res) => {
     analyzedInstructions,
   });
 
-  // const diet = await Diet.findAll({
-  //   where: {
-  //     name: "Low FODMAP",
-  //   },
-  // });
+  if (diets.length) {
+    const queryDiets = await Promise.all(
+      diets.map((element) => {
+        return Diet.findOne({ where: { name: `${element}` } });
+      })
+    );
 
-  await newRecipe.addDiet({ through: { name: "Low FODMAP" } });
+    await newRecipe.setDiets(queryDiets);
+  }
 
-  const recipe = await Recipe.findAll({
+  const recipe = await Recipe.findOne({
     where: {
       title,
     },
