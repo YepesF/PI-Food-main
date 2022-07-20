@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { Op } = require("sequelize");
-const models = require("./models"); //TODO - Modularizar en un archivo todas las funciones.
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
@@ -13,7 +12,6 @@ const respuestaAPI = require("../../../complexSearch.json"),
 
 router.get("/", async (req, res) => {
   const { name } = req.query;
-
   try {
     if (name) {
       // const recipes = respuestaAPI.results;
@@ -30,9 +28,16 @@ router.get("/", async (req, res) => {
         where: {
           title: { [Op.iLike]: `%${name}%` },
         },
+        include: {
+          model: Diet,
+          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
+        },
       });
 
-      const resultBD = queryBD.map((recipe) => recipe.dataValues); //TODO - No esta mostrando la combinacion IDNAME.
+      const resultBD = queryBD.map((recipe) => recipe.dataValues);
 
       const consolidate = [...resultApi, ...resultBD];
 
@@ -58,8 +63,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:idReceta", async (req, res) => {
-  const { idReceta } = req.params;
+router.get("/:idRecipe", async (req, res) => {
+  const { idRecipe } = req.params;
 
   // [] Los campos mostrados en la ruta principal para cada receta (imagen, nombre, tipo de plato y tipo de dieta)
   // [] Resumen del plato
@@ -67,28 +72,31 @@ router.get("/:idReceta", async (req, res) => {
   // [] Paso a paso
 
   try {
-    let recipeAPI;
+    let recipeAPI, recipeBD;
     // let recipeAPI = respuestaID;
-
-    // const recipeAPI = await axios
-    //   .get(
-    //     `https://api.spoonacular.com/recipes/${Number(
-    //       idReceta
-    //     )}/information?apiKey=${API_KEY}`
-    //   )
-    //   .then((response) => response.data);
-
-    if (!recipeAPI) {
-      var recipeBD = await Recipe.findByPk(Number(idReceta), {
-        include: Diet,
+    if (Number(idRecipe)) {
+      recipeAPI = await axios
+        .get(
+          `https://api.spoonacular.com/recipes/${Number(
+            idRecipe
+          )}/information?apiKey=${API_KEY}`
+        )
+        .then((response) => response.data);
+    } else {
+      recipeBD = await Recipe.findByPk(idRecipe, {
+        include: {
+          model: Diet,
+          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
+        },
       });
 
       if (!recipeBD)
         return res
           .status(404)
-          .send(
-            `No puedimos encontrar ninguna receta con el ID ${Number(idReceta)}`
-          );
+          .send(`No puedimos encontrar ninguna receta con el ID ${idRecipe}`);
     }
 
     const {
@@ -111,8 +119,8 @@ router.get("/:idReceta", async (req, res) => {
       analyzedInstructions,
     });
   } catch (error) {
-    res.status(400).send(error.message);
-    // .send(`Error durante la ejecucion por favor intente nuevamente`);
+    // res.status(400).send(error.message);
+    res.send(`Error durante la ejecucion por favor intente nuevamente`);
   }
 });
 
@@ -126,38 +134,57 @@ router.post("/", async (req, res) => {
   // [ ] Botón/Opción para crear una nueva receta
   const { title, summary, healthScore, analyzedInstructions, diets } = req.body;
 
-  if (!title) return res.status(400).send(`El valor 'title' es requerido`);
-  if (!summary) return res.status(400).send(`El valor 'sumary' es requerido`);
-  if (healthScore > 100 || healthScore < 0)
-    return res
-      .status(400)
-      .send(`El valor 'healthScore' no puede ser mayor que 100 ni menor que 0`);
+  try {
+    if (!title) return res.status(400).send(`El valor 'title' es requerido`);
 
-  const newRecipe = await Recipe.create({
-    title,
-    summary,
-    healthScore,
-    analyzedInstructions,
-  });
+    const findName = await Recipe.findOne({
+      where: {
+        title,
+      },
+    });
+    if (findName)
+      return res
+        .status(400)
+        .send(
+          "La receta ya existe, por favor ingresar un nombre receta diferente."
+        );
 
-  if (diets.length) {
-    const queryDiets = await Promise.all(
-      diets.map((element) => {
-        return Diet.findOne({ where: { name: `${element}` } });
-      })
-    );
+    if (!summary) return res.status(400).send(`El valor 'sumary' es requerido`);
+    if (healthScore > 100 || healthScore < 0)
+      return res
+        .status(400)
+        .send(
+          `El valor 'healthScore' no puede ser mayor que 100 ni menor que 0`
+        );
 
-    await newRecipe.setDiets(queryDiets);
-  }
+    const queryDiets = await Diet.findAll({ where: { name: diets } });
 
-  const recipe = await Recipe.findOne({
-    where: {
+    const newRecipe = await Recipe.create({
       title,
-    },
-    include: Diet,
-  });
+      summary,
+      healthScore,
+      analyzedInstructions,
+    });
 
-  res.json(recipe);
+    await newRecipe.addDiet(queryDiets);
+
+    const recipe = await Recipe.findOne({
+      where: {
+        title,
+      },
+      include: {
+        model: Diet,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
+      },
+    });
+
+    res.json(recipe);
+  } catch (error) {
+    res.send(`Error durante la ejecucion por favor intente nuevamente`);
+  }
 });
 
 module.exports = router;

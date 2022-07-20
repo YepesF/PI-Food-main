@@ -6,6 +6,12 @@ module.exports = (sequelize) => {
   sequelize.define(
     "recipe",
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV1,
+        allowNull: false,
+        primaryKey: true,
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -38,12 +44,6 @@ module.exports = (sequelize) => {
       },
       dishTypes: {
         type: DataTypes.ARRAY(DataTypes.TEXT),
-      },
-      idname: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return `${this.id}${this.title}`;
-        },
       },
     },
     {
