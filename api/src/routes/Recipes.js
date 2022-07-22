@@ -135,7 +135,14 @@ router.post("/", async (req, res) => {
   const { title, summary, healthScore, analyzedInstructions, diets } = req.body;
 
   try {
-    if (!title) return res.status(400).send(`El valor 'title' es requerido`);
+    if (!title)
+      return res.status(400).send("El nombre de la recetra es requerido.");
+    if (!/^[\w][\w _]*$/.test(title))
+      return res
+        .status(400)
+        .send(
+          "El nombre de la recetra es invalido, recuerda no incluir simbolos, ni espacios al inicio del texto."
+        );
 
     const findName = await Recipe.findOne({
       where: {
@@ -149,12 +156,26 @@ router.post("/", async (req, res) => {
           "La receta ya existe, por favor ingresar un nombre receta diferente."
         );
 
-    if (!summary) return res.status(400).send(`El valor 'sumary' es requerido`);
+    if (!summary)
+      return res.status(400).send("El resumen de la receta es requerido.");
+    if (/^[ _]*$/.test(input.summary))
+      return res
+        .status(400)
+        .send(
+          "El resumen de la receta es invalido, no puede contener espacios al inicio del texto."
+        );
+
+    if (!/^[0-9]*$/.test(input.healthscore))
+      return res
+        .status(400)
+        .send(
+          "El nivel de comida saludable es invalido, solo se admiten numeros."
+        );
     if (healthScore > 100 || healthScore < 0)
       return res
         .status(400)
         .send(
-          `El valor 'healthScore' no puede ser mayor que 100 ni menor que 0`
+          "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0."
         );
 
     const queryDiets = await Diet.findAll({ where: { name: diets } });

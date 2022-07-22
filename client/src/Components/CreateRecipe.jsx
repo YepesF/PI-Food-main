@@ -1,17 +1,53 @@
 import React from "react";
 import { useState } from "react";
 
+export function validate(input) {
+  let error = {};
+  if (!input.title) {
+    error.title = "El nombre de la recetra es requerido.";
+  } else if (!/^[\w][\w _]*$/.test(input.title)) {
+    error.title =
+      "El nombre de la recetra es invalido, recuerda no incluir simbolos, ni espacios al inicio del texto.";
+  }
+
+  if (!input.summary) {
+    error.summary = "El resumen de la receta es requerido.";
+  } else if (/^[ _]*$/.test(input.summary)) {
+    error.summary =
+      "El resumen de la receta es invalido, no puede contener espacios al inicio del texto.";
+  }
+
+  if (!/^[0-9]*$/.test(input.healthscore)) {
+    error.healthscore =
+      "El nivel de comida saludable es invalido, solo se admiten numeros.";
+  } else if (input.healthscore > 100 || input.healthscore < 0) {
+    error.healthscore =
+      "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0.";
+  }
+
+  return error;
+}
+
 export default function CreateRecipe() {
   let [input, setInput] = useState({
     title: "",
     summary: "",
+    healthscore: 0,
     steps: "",
     diets: [],
   });
 
+  let [error, setError] = useState({});
+
   const handleChange = (event) => {
     event.preventDefault();
     setInput((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+
+    let objError = validate({
+      ...input,
+      [event.target.name]: event.target.value,
+    });
+    setError(objError);
   };
 
   const handleChangeDiets = (event) => {
@@ -43,6 +79,7 @@ export default function CreateRecipe() {
             value={input.title}
             onChange={(e) => handleChange(e)}
           />
+          {error.title && <p>{error.title}</p>}
         </div>
 
         <br />
@@ -55,6 +92,20 @@ export default function CreateRecipe() {
             value={input.summary}
             onChange={(e) => handleChange(e)}
           />
+          {error.summary && <p>{error.summary}</p>}
+        </div>
+
+        <br />
+
+        <div>
+          <label>Nivel de Comida Saludable</label>
+          <input
+            type={"text"}
+            name={"healthscore"}
+            value={input.healthscore}
+            onChange={(e) => handleChange(e)}
+          />
+          {error.healthscore && <p>{error.healthscore}</p>}
         </div>
 
         <br />
@@ -67,6 +118,7 @@ export default function CreateRecipe() {
             value={input.steps}
             onChange={(e) => handleChange(e)}
           />
+          {error.steps && <p>{error.steps}</p>}
         </div>
 
         <br />
@@ -164,7 +216,13 @@ export default function CreateRecipe() {
         <br />
 
         <div>
-          <input type={"submit"} value={"Crear Receta"} id="" />
+          {error.title ||
+          error.summary ||
+          error.healthscore ||
+          !input.title ||
+          !input.summary ? null : (
+            <input type={"submit"} value={"Crear Receta"} id="" />
+          )}
         </div>
       </form>
     </div>
