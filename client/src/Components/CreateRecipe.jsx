@@ -1,26 +1,28 @@
 import React from "react";
 import { useState } from "react";
+import { createRecipe } from "../actions";
+import { useDispatch } from "react-redux";
 
-export function validate(input) {
+export function validate(recipe) {
   let error = {};
-  if (!input.title) {
+  if (!recipe.title) {
     error.title = "El nombre de la recetra es requerido.";
-  } else if (!/^[\w][\w _]*$/.test(input.title)) {
+  } else if (!/^[\w][\w _]*$/.test(recipe.title)) {
     error.title =
       "El nombre de la recetra es invalido, recuerda no incluir simbolos, ni espacios al inicio del texto.";
   }
 
-  if (!input.summary) {
+  if (!recipe.summary) {
     error.summary = "El resumen de la receta es requerido.";
-  } else if (/^[ _]*$/.test(input.summary)) {
+  } else if (/^[ _]*$/.test(recipe.summary)) {
     error.summary =
       "El resumen de la receta es invalido, no puede contener espacios al inicio del texto.";
   }
 
-  if (!/^[0-9]*$/.test(input.healthscore)) {
+  if (!/^[0-9]*$/.test(recipe.healthscore)) {
     error.healthscore =
       "El nivel de comida saludable es invalido, solo se admiten numeros.";
-  } else if (input.healthscore > 100 || input.healthscore < 0) {
+  } else if (recipe.healthscore > 100 || recipe.healthscore < 0) {
     error.healthscore =
       "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0.";
   }
@@ -29,7 +31,7 @@ export function validate(input) {
 }
 
 export default function CreateRecipe() {
-  let [input, setInput] = useState({
+  let [recipe, setRecipe] = useState({
     title: "",
     summary: "",
     healthscore: 0,
@@ -37,14 +39,28 @@ export default function CreateRecipe() {
     diets: [],
   });
 
+  let [checked, setChecked] = useState({
+    glutenfree: false,
+    ketogenic: false,
+    vegetarian: false,
+    lactovegetarian: false,
+    ovovegetarian: false,
+    vegan: false,
+    pescetarian: false,
+    paleo: false,
+    primal: false,
+    lowfodmap: false,
+    whole30: false,
+  });
+
   let [error, setError] = useState({});
 
   const handleChange = (event) => {
     event.preventDefault();
-    setInput((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    setRecipe((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 
     let objError = validate({
-      ...input,
+      ...recipe,
       [event.target.name]: event.target.value,
     });
     setError(objError);
@@ -52,19 +68,48 @@ export default function CreateRecipe() {
 
   const handleChangeDiets = (event) => {
     // event.preventDefault();
-    event.target.checked
-      ? setInput((prev) => ({
-          ...prev,
-          diets: [...input.diets, event.target.value],
-        }))
-      : setInput((prev) => ({
-          ...prev,
-          diets: input.diets.filter((e) => e !== event.target.value),
-        }));
+    if (event.target.checked) {
+      setRecipe((prev) => ({
+        ...prev,
+        diets: [...recipe.diets, event.target.value],
+      }));
+      setChecked((prev) => ({ ...prev, [event.target.name]: true }));
+    } else {
+      setRecipe((prev) => ({
+        ...prev,
+        diets: recipe.diets.filter((e) => e !== event.target.value),
+      }));
+      setChecked((prev) => ({ ...prev, [event.target.name]: false }));
+    }
   };
+
+  let dispatch = useDispatch();
 
   const handledSubmit = (event) => {
     event.preventDefault();
+    dispatch(createRecipe(recipe));
+
+    setRecipe({
+      title: "",
+      summary: "",
+      healthscore: 0,
+      steps: "",
+      diets: [],
+    });
+
+    setChecked({
+      glutenfree: false,
+      ketogenic: false,
+      vegetarian: false,
+      lactovegetarian: false,
+      ovovegetarian: false,
+      vegan: false,
+      pescetarian: false,
+      paleo: false,
+      primal: false,
+      lowfodmap: false,
+      whole30: false,
+    });
   };
 
   return (
@@ -76,7 +121,7 @@ export default function CreateRecipe() {
           <input
             type={"text"}
             name={"title"}
-            value={input.title}
+            value={recipe.title}
             onChange={(e) => handleChange(e)}
           />
           {error.title && <p>{error.title}</p>}
@@ -89,7 +134,7 @@ export default function CreateRecipe() {
           <input
             type={"text"}
             name={"summary"}
-            value={input.summary}
+            value={recipe.summary}
             onChange={(e) => handleChange(e)}
           />
           {error.summary && <p>{error.summary}</p>}
@@ -102,7 +147,7 @@ export default function CreateRecipe() {
           <input
             type={"text"}
             name={"healthscore"}
-            value={input.healthscore}
+            value={recipe.healthscore}
             onChange={(e) => handleChange(e)}
           />
           {error.healthscore && <p>{error.healthscore}</p>}
@@ -115,7 +160,7 @@ export default function CreateRecipe() {
           <input
             type={"text"}
             name={"steps"}
-            value={input.steps}
+            value={recipe.steps}
             onChange={(e) => handleChange(e)}
           />
           {error.steps && <p>{error.steps}</p>}
@@ -126,8 +171,9 @@ export default function CreateRecipe() {
         <div>
           <input
             type="checkbox"
-            name={"gluten free"}
-            value={"gluten free"}
+            name={"glutenfree"}
+            value={"Gluten Free"}
+            checked={checked.glutenfree}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Gluten Free</label>
@@ -135,7 +181,8 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"ketogenic"}
-            value={"ketogenic"}
+            value={"Ketogenic"}
+            checked={checked.ketogenic}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Ketogenic</label>
@@ -143,23 +190,26 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"vegetarian"}
-            value={"vegetarian"}
+            value={"Vegetarian"}
+            checked={checked.vegetarian}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Vegetarian</label>
 
           <input
             type="checkbox"
-            name={"lacto-vegetarian"}
-            value={"lacto-vegetarian"}
+            name={"lactovegetarian"}
+            value={"Lacto Vegetarian"}
+            checked={checked.lactovegetarian}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Lacto-Vegetarian</label>
 
           <input
             type="checkbox"
-            name={"ovo-vegetarian"}
-            value={"ovo-vegetarian"}
+            name={"ovovegetarian"}
+            value={"Ovo Vegetarian"}
+            checked={checked.ovovegetarian}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Ovo-Vegetarian</label>
@@ -167,7 +217,8 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"vegan"}
-            value={"vegan"}
+            value={"Vegan"}
+            checked={checked.vegan}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Vegan</label>
@@ -175,7 +226,8 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"pescetarian"}
-            value={"pescetarian"}
+            value={"Pescetarian"}
+            checked={checked.pescetarian}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Pescetarian</label>
@@ -183,7 +235,8 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"paleo"}
-            value={"paleo"}
+            value={"Paleo"}
+            checked={checked.paleo}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Paleo</label>
@@ -191,15 +244,17 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"primal"}
-            value={"primal"}
+            value={"Primal"}
+            checked={checked.primal}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Primal</label>
 
           <input
             type="checkbox"
-            name={"low fodmap"}
-            value={"low fodmap"}
+            name={"lowfodmap"}
+            value={"Low FODMAP"}
+            checked={checked.lowfodmap}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Low FODMAP</label>
@@ -207,7 +262,8 @@ export default function CreateRecipe() {
           <input
             type="checkbox"
             name={"whole30"}
-            value={"whole30"}
+            value={"Whole30"}
+            checked={checked.whole30}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>Whole30</label>
@@ -219,8 +275,8 @@ export default function CreateRecipe() {
           {error.title ||
           error.summary ||
           error.healthscore ||
-          !input.title ||
-          !input.summary ? null : (
+          !recipe.title ||
+          !recipe.summary ? null : (
             <input type={"submit"} value={"Crear Receta"} id="" />
           )}
         </div>
