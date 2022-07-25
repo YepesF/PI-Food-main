@@ -138,7 +138,15 @@ router.post("/", async (req, res) => {
   // Paso a paso
   // [ ] Posibilidad de seleccionar/agregar uno o más tipos de dietas
   // [ ] Botón/Opción para crear una nueva receta
-  const { title, summary, healthScore, analyzedInstructions, diets } = req.body;
+  const {
+    title,
+    summary,
+    healthScore,
+    analyzedInstructions,
+    diets,
+    image,
+    dishTypes,
+  } = req.body;
 
   try {
     if (!title)
@@ -191,6 +199,8 @@ router.post("/", async (req, res) => {
       summary,
       healthScore,
       analyzedInstructions,
+      image,
+      dishTypes,
     });
 
     await newRecipe.addDiet(queryDiets);
@@ -210,7 +220,7 @@ router.post("/", async (req, res) => {
 
     res.json(recipe);
   } catch (error) {
-    res.send(error.message);
+    res.status(400).send(error.message);
     // res.status(400).send(`Error durante la ejecucion por favor intente nuevamente`);
   }
 });

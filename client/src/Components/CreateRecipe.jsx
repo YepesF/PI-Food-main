@@ -27,6 +27,8 @@ export function validate(recipe) {
       "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0.";
   }
 
+  if(!/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(recipe.image)) {error.image = "La URL de la imagen es invalida.";}
+
   return error;
 }
 
@@ -36,6 +38,7 @@ export default function CreateRecipe() {
     summary: "",
     healthscore: 0,
     instructions: "",
+    image: "",
     diets: [],
   });
 
@@ -168,6 +171,19 @@ export default function CreateRecipe() {
           />
           {error.instructions && <p>{error.instructions}</p>}
         </div>
+
+          <br />
+
+          <div>
+            <label>Imagen</label>
+            <input
+              type={"text"}
+              name={"image"}
+              value={recipe.image}
+              onChange={(e) => handleChange(e)}
+            />
+            {error.image && <p>{error.image}</p>}
+          </div>
 
         <br />
 
