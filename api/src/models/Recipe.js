@@ -7,10 +7,16 @@ module.exports = (sequelize) => {
     "recipe",
     {
       id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV1,
-        allowNull: false,
+        type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
+        // get() {
+        //   const rawValue = this.getDataValue("id");
+        //   return console.log(rawValue);
+        // },
+        set(value) {
+          this.setDataValue(value + 10);
+        },
       },
       title: {
         type: DataTypes.STRING,
@@ -70,6 +76,7 @@ module.exports = (sequelize) => {
     },
     {
       timestamps: false,
+      // initialAutoIncrement: 1000,
     }
   );
 };

@@ -35,7 +35,7 @@ export default function CreateRecipe() {
     title: "",
     summary: "",
     healthscore: 0,
-    steps: "",
+    instructions: "",
     diets: [],
   });
 
@@ -68,6 +68,7 @@ export default function CreateRecipe() {
 
   const handleChangeDiets = (event) => {
     // event.preventDefault();
+    console.log(event.target.name);
     if (event.target.checked) {
       setRecipe((prev) => ({
         ...prev,
@@ -93,7 +94,7 @@ export default function CreateRecipe() {
       title: "",
       summary: "",
       healthscore: 0,
-      steps: "",
+      instructions: "",
       diets: [],
     });
 
@@ -123,6 +124,8 @@ export default function CreateRecipe() {
             name={"title"}
             value={recipe.title}
             onChange={(e) => handleChange(e)}
+            onFocus={(e) => (e.target.placeholder = "Example: Lasagna")}
+            autoFocus
           />
           {error.title && <p>{error.title}</p>}
         </div>
@@ -159,11 +162,11 @@ export default function CreateRecipe() {
           <label>Paso a paso</label>
           <input
             type={"text"}
-            name={"steps"}
-            value={recipe.steps}
+            name={"instructions"}
+            value={recipe.instructions}
             onChange={(e) => handleChange(e)}
           />
-          {error.steps && <p>{error.steps}</p>}
+          {error.instructions && <p>{error.instructions}</p>}
         </div>
 
         <br />

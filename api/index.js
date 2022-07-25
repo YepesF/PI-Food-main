@@ -22,7 +22,7 @@ const server = require("./src/app.js");
 const { conn, Recipe, Diet } = require("./src/db.js");
 
 // Syncing all the models at once.
-conn.sync({ alter: true }).then(() => {
+conn.sync({ force: true }).then(() => {
   server.listen(3001, async () => {
     //Precarga Recipes
     // const recipeTomato = await Recipe.create({

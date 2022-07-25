@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { Diet } = require("../db");
 
-const firsDiets = [
+const firtsDiets = [
   "Gluten Free",
   "Ketogenic",
   "Vegetarian",
@@ -19,7 +19,7 @@ const firsDiets = [
 
 router.get("/", async (req, res) => {
   try {
-    firsDiets.forEach((diet) => {
+    firtsDiets.forEach((diet) => {
       Diet.findOrCreate({
         where: { name: diet },
       });

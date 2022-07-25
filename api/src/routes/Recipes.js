@@ -14,11 +14,11 @@ router.get("/", async (req, res) => {
   const { name } = req.query;
   try {
     if (name) {
-      // const recipes = respuestaAPI.results;
+      const recipes = respuestaAPI.results;
 
-      const recipes = await axios
-        .get(ALL_RECIPES)
-        .then((response) => response.data.results);
+      // const recipes = await axios
+      //   .get(ALL_RECIPES)
+      //   .then((response) => response.data.results);
 
       const resultApi = recipes.filter((recipe) =>
         recipe.title.toLowerCase().includes(name.toLowerCase())
@@ -42,20 +42,26 @@ router.get("/", async (req, res) => {
       const consolidate = [...resultApi, ...resultBD];
 
       if (!consolidate.length)
-        return res
-          .status(404)
-          .send(
-            `No puedimos encontrar ninguna receta que contenga el texto ${name}`
-          );
+        return res.status(404).json({
+          msg: `No puedimos encontrar ninguna receta que contenga el texto ${name}`,
+        });
 
       return res.json(consolidate);
     }
 
-    res
-      .status(400)
-      .send(
-        "Debe enviar el pametro 'name' con el nombre de la receta(Ej. ?name=tomato) para poder procesar su solicitud."
-      );
+    const recipesAPI = respuestaAPI.results;
+
+    // const recipesAPI = await axios
+    //   .get(ALL_RECIPES)
+    //   .then((response) => response.data.results);
+
+    const recipesBD = await Recipe.findAll();
+
+    // const resultBD = queryBD.map((recipe) => recipe.dataValues);
+
+    const consolidate = [...recipesAPI, ...recipesBD];
+
+    return res.json(consolidate);
   } catch (error) {
     res
       .status(400)
@@ -73,15 +79,15 @@ router.get("/:idRecipe", async (req, res) => {
 
   try {
     let recipeAPI, recipeBD;
-    // let recipeAPI = respuestaID;
     if (Number(idRecipe)) {
-      recipeAPI = await axios
-        .get(
-          `https://api.spoonacular.com/recipes/${Number(
-            idRecipe
-          )}/information?apiKey=${API_KEY}`
-        )
-        .then((response) => response.data);
+      recipeAPI = respuestaID;
+      // recipeAPI = await axios
+      //   .get(
+      //     `https://api.spoonacular.com/recipes/${Number(
+      //       idRecipe
+      //     )}/information?apiKey=${API_KEY}`
+      //   )
+      //   .then((response) => response.data);
     } else {
       recipeBD = await Recipe.findByPk(idRecipe, {
         include: {
@@ -106,7 +112,7 @@ router.get("/:idRecipe", async (req, res) => {
       diets,
       summary,
       healthScore,
-      analyzedInstructions,
+      instructions,
     } = recipeAPI || recipeBD;
 
     res.json({
@@ -116,7 +122,7 @@ router.get("/:idRecipe", async (req, res) => {
       diets,
       summary,
       healthScore,
-      analyzedInstructions,
+      instructions,
     });
   } catch (error) {
     // res.status(400).send(error.message);
@@ -158,14 +164,14 @@ router.post("/", async (req, res) => {
 
     if (!summary)
       return res.status(400).send("El resumen de la receta es requerido.");
-    if (/^[ _]*$/.test(input.summary))
+    if (/^[ _]*$/.test(summary))
       return res
         .status(400)
         .send(
           "El resumen de la receta es invalido, no puede contener espacios al inicio del texto."
         );
 
-    if (!/^[0-9]*$/.test(input.healthscore))
+    if (!/^[0-9]*$/.test(healthScore))
       return res
         .status(400)
         .send(
@@ -204,7 +210,8 @@ router.post("/", async (req, res) => {
 
     res.json(recipe);
   } catch (error) {
-    res.send(`Error durante la ejecucion por favor intente nuevamente`);
+    res.send(error.message);
+    // res.status(400).send(`Error durante la ejecucion por favor intente nuevamente`);
   }
 });
 
