@@ -192,7 +192,9 @@ router.post("/", async (req, res) => {
           "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0."
         );
 
-    const queryDiets = await Diet.findAll({ where: { name: diets } });
+    const queryDiets = await Diet.findAll({
+      where: { name: diets },
+    });
 
     const newRecipe = await Recipe.create({
       title,

@@ -1,5 +1,6 @@
 import {
   CREATE_RECIPE,
+  FILTER_DIET,
   SET_RECIPE,
   SET_RECIPES,
   SET_RECIPES_NAME,
@@ -33,6 +34,12 @@ export default function reducer(state = initialState, action) {
       };
 
     case SET_RECIPES_NAME:
+      return {
+        ...state,
+        recipes: action.payload,
+      };
+
+    case FILTER_DIET:
       return {
         ...state,
         recipes: action.payload,

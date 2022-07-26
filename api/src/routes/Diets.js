@@ -3,27 +3,8 @@ const express = require("express");
 const router = express.Router();
 const { Diet } = require("../db");
 
-const firtsDiets = [
-  "Gluten Free",
-  "Ketogenic",
-  "Vegetarian",
-  "Lacto-Vegetarian",
-  "Ovo-Vegetarian",
-  "Vegan",
-  "Pescetarian",
-  "Paleo",
-  "Primal",
-  "Low FODMAP",
-  "Whole30",
-];
-
 router.get("/", async (req, res) => {
   try {
-    firtsDiets.forEach((diet) => {
-      Diet.findOrCreate({
-        where: { name: diet },
-      });
-    });
     const diets = await Diet.findAll();
     res.json(diets);
   } catch (error) {

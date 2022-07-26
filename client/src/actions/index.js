@@ -1,7 +1,8 @@
 export const CREATE_RECIPE = "CREATE_RECIPE",
   SET_RECIPES = "SET_RECIPES",
   SET_RECIPE = "SET_RECIPE",
-  SET_RECIPES_NAME = "SET_RECIPES_NAME";
+  SET_RECIPES_NAME = "SET_RECIPES_NAME",
+  FILTER_DIET = "FILTER_DIET";
 
 export function createRecipe(recipe) {
   return {
@@ -33,5 +34,12 @@ export function getRecipesName(title) {
       .then((recipes) =>
         dispatch({ type: SET_RECIPES_NAME, payload: recipes })
       );
+  };
+}
+
+export function filterDiet(recipes) {
+  return {
+    type: FILTER_DIET,
+    payload: recipes,
   };
 }

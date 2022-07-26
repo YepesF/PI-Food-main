@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Recipe from "./Recipe";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecipes, getRecipesName } from "../actions";
+import { filterDiet, getRecipes, getRecipesName } from "../actions";
 
 export default function Home(props) {
+  let recipes = useSelector((state) => state.recipes),
+    dispatch = useDispatch(); //Obtengo informacion del estado global.
+
   const firtsDiets = [
     { name: "glutenfree", value: "Gluten Free" },
     { name: "ketogenic", value: "Ketogenic" },
@@ -18,25 +21,22 @@ export default function Home(props) {
     { name: "whole30", value: "Whole30" },
   ];
 
-  let [checked, setChecked] = useState({
-    glutenfree: false,
-    ketogenic: false,
-    vegetarian: false,
-    lactovegetarian: false,
-    ovovegetarian: false,
-    vegan: false,
-    pescetarian: false,
-    paleo: false,
-    primal: false,
-    lowfodmap: false,
-    whole30: false,
-  });
+  // let [checked, setChecked] = useState({
+  //   glutenfree: false,
+  //   ketogenic: false,
+  //   vegetarian: false,
+  //   lactovegetarian: false,
+  //   ovovegetarian: false,
+  //   vegan: false,
+  //   pescetarian: false,
+  //   paleo: false,
+  //   primal: false,
+  //   lowfodmap: false,
+  //   whole30: false,
+  // });
 
-  let [search, setSearch] = React.useState("");
-
-  let dispatch = useDispatch();
-
-  let recipes = useSelector((state) => state.recipes); //Obtengo informacion del estado global.
+  let [search, setSearch] = React.useState(""),
+    global = [...recipes];
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -46,16 +46,18 @@ export default function Home(props) {
 
   const handleChangeDiets = (event) => {
     // event.preventDefault();
-    console.log(event.target);
     if (event.target.checked) {
-      setChecked((prev) => ({ ...prev, [event.target.name]: true }));
+      console.log(event.target);
+      // setChecked((prev) => ({ ...prev, [event.target.name]: true }));
       const filter = recipes.filter((recipe) =>
-        recipe.diets.includes(event.target.name)
+        recipe.diets.includes(event.target.value.toLowerCase())
       );
-      console.log(filter);
-    } else {
-      setChecked((prev) => ({ ...prev, [event.target.name]: false }));
+      dispatch(filterDiet(filter));
     }
+    // else {
+    //   // setChecked((prev) => ({ ...prev, [event.target.name]: false }));
+    //   dispatch(filterDiet(filter.pop()));
+    // }
   };
 
   useEffect(() => {
@@ -102,11 +104,17 @@ export default function Home(props) {
 
       {firtsDiets.map((diet, current) => (
         <div key={`D${current}`}>
-          <input
+          {/* <input
             type="checkbox"
             name={diet.name}
             value={diet.value}
             checked={checked[diet.name]}
+            onChange={(e) => handleChangeDiets(e)}
+          /> */}
+          <input
+            type="radio"
+            name="diet"
+            value={diet.name}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>{diet.value}</label>
