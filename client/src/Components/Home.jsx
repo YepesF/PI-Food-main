@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Recipe from "./Recipe";
 import { useDispatch, useSelector } from "react-redux";
-import { filterDiet, getRecipes, getRecipesName } from "../actions";
+import { getRecipes, getRecipesName } from "../actions";
 
 export default function Home(props) {
   let recipes = useSelector((state) => state.recipes),
@@ -35,8 +35,8 @@ export default function Home(props) {
   //   whole30: false,
   // });
 
-  let [search, setSearch] = React.useState(""),
-    global = [...recipes];
+  let [search, setSearch] = useState(""),
+    [filter, setFilter] = useState("");
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -44,20 +44,30 @@ export default function Home(props) {
     dispatch(getRecipesName(event.target.value));
   };
 
-  const handleChangeDiets = (event) => {
-    // event.preventDefault();
-    if (event.target.checked) {
-      console.log(event.target);
-      // setChecked((prev) => ({ ...prev, [event.target.name]: true }));
-      const filter = recipes.filter((recipe) =>
-        recipe.diets.includes(event.target.value.toLowerCase())
-      );
-      dispatch(filterDiet(filter));
+  const handleChangeDiets = (event) => {};
+
+  const handleChangeFilters = (event) => {
+    event.preventDefault();
+    console.log(event.target.value);
+    if (event.target.value === "asc") {
+      recipes.sort((a, b) => a.title.localeCompare(b.title));
+      setFilter(event.target.value);
     }
-    // else {
-    //   // setChecked((prev) => ({ ...prev, [event.target.name]: false }));
-    //   dispatch(filterDiet(filter.pop()));
-    // }
+    if (event.target.value === "desc") {
+      recipes.sort((a, b) => b.title.localeCompare(a.title));
+      setFilter(event.target.value);
+    }
+    if (event.target.value === "max") {
+      recipes.sort((a, b) => b.healthScore - a.healthScore);
+      setFilter(event.target.value);
+    }
+    if (event.target.value === "min") {
+      recipes.sort((a, b) => a.healthScore - b.healthScore);
+      setFilter(event.target.value);
+    }
+    if (event.target.value === "most") {
+      dispatch(getRecipes());
+    }
   };
 
   useEffect(() => {
@@ -92,6 +102,7 @@ export default function Home(props) {
               vegetarian={recipe.vegetarian}
               vegan={recipe.vegan}
               glutenFree={recipe.glutenFree}
+              healthScore={recipe.healthScore}
             />
           ))
         )}
@@ -125,7 +136,8 @@ export default function Home(props) {
       <hr />
       <br />
       <h2>Filtros</h2>
-      <select name="sortBy">
+      <select name="sortBy" onChange={(e) => handleChangeFilters(e)}>
+        <option value={"most"}>Mas Relevantes</option>
         <option value={"asc"}>Alfabetico Ascendente</option>
         <option value={"desc"}>Alfabetico Descendente</option>
         <option value={"max"}>Health Score Max.</option>

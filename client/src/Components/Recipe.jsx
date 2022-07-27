@@ -9,6 +9,7 @@ export default function Recipe({
   vegetarian,
   vegan,
   glutenFree,
+  healthScore,
 }) {
   return (
     <div>
@@ -17,6 +18,7 @@ export default function Recipe({
         <h2>{title}</h2>
       </NavLink>
       <p>{typediet}</p>
+      <p>{healthScore}</p>
       <p>
         {vegetarian && "Vegetarian "} {vegan && "Vegan"}{" "}
         {glutenFree && "Gluten Free"}
