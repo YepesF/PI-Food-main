@@ -2,7 +2,8 @@ export const CREATE_RECIPE = "CREATE_RECIPE",
   SET_RECIPES = "SET_RECIPES",
   SET_RECIPE = "SET_RECIPE",
   SET_RECIPES_NAME = "SET_RECIPES_NAME",
-  FILTER_DIET = "FILTER_DIET";
+  FILTER_DIET = "FILTER_DIET",
+  PAGINATION = "PAGINATION";
 
 export function createRecipe(recipe) {
   return {
@@ -41,5 +42,13 @@ export function filterDiet(recipes) {
   return {
     type: FILTER_DIET,
     payload: recipes,
+  };
+}
+
+export function getPagination(page) {
+  return function (dispatch) {
+    return fetch(`http://localhost:3001/recipes?page=${page}`)
+      .then((response) => response.json())
+      .then((recipes) => dispatch({ type: PAGINATION, payload: recipes }));
   };
 }

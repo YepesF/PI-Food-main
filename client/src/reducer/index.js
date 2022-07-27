@@ -4,6 +4,7 @@ import {
   SET_RECIPE,
   SET_RECIPES,
   SET_RECIPES_NAME,
+  PAGINATION,
 } from "../actions";
 
 let id = 1;
@@ -40,6 +41,12 @@ export default function reducer(state = initialState, action) {
       };
 
     case FILTER_DIET:
+      return {
+        ...state,
+        recipes: action.payload,
+      };
+
+    case PAGINATION:
       return {
         ...state,
         recipes: action.payload,

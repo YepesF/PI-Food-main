@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Recipe from "./Recipe";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecipes, getRecipesName } from "../actions";
+import { getRecipes, getRecipesName, getPagination } from "../actions";
 
 export default function Home(props) {
   let recipes = useSelector((state) => state.recipes),
@@ -36,7 +36,8 @@ export default function Home(props) {
   // });
 
   let [search, setSearch] = useState(""),
-    [filter, setFilter] = useState("");
+    [filter, setFilter] = useState(""),
+    [pagination, setPagination] = useState(1);
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -68,6 +69,17 @@ export default function Home(props) {
     if (event.target.value === "most") {
       dispatch(getRecipes());
     }
+  };
+
+  const handleChangePage = (event) => {
+    event.preventDefault();
+    if (event.target.value === "next") {
+      setPagination(pagination + 1);
+    }
+    if (event.target.value === "previous") {
+      setPagination(pagination - 1);
+    }
+    dispatch(getPagination(pagination));
   };
 
   useEffect(() => {
@@ -147,17 +159,15 @@ export default function Home(props) {
       <hr />
       <br />
       <h2>Paginacion</h2>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>10</button>
-      <button>11</button>
+      <h3>Pagina {pagination}</h3>
+      {pagination > 1 && (
+        <button onClick={(e) => handleChangePage(e)} value={"previous"}>
+          {"< Anterior"}
+        </button>
+      )}
+      <button onClick={(e) => handleChangePage(e)} value={"next"}>
+        {"Siguiente >"}
+      </button>
     </div>
   );
 }

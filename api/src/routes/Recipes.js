@@ -11,7 +11,7 @@ const respuestaAPI = require("../../../complexSearch.json"),
   respuestaID = require("../../../information.json");
 
 router.get("/", async (req, res) => {
-  const { name } = req.query;
+  const { name, page } = req.query;
   try {
     if (name) {
       const recipes = respuestaAPI.results;
@@ -49,6 +49,27 @@ router.get("/", async (req, res) => {
       return res.json(consolidate);
     }
 
+    if (page) {
+      const startIndex = (page - 1) * 9,
+        endIndex = page * 9;
+
+      const recipesAPI = respuestaAPI.results;
+
+      // const recipesAPI = await axios
+      //   .get(ALL_RECIPES)
+      //   .then((response) => response.data.results);
+
+      const recipesBD = await Recipe.findAll();
+
+      // const resultBD = queryBD.map((recipe) => recipe.dataValues);
+
+      const consolidate = [...recipesAPI, ...recipesBD];
+
+      const result = consolidate.slice(startIndex, endIndex);
+
+      res.json(result);
+    }
+
     const recipesAPI = respuestaAPI.results;
 
     // const recipesAPI = await axios
@@ -63,9 +84,10 @@ router.get("/", async (req, res) => {
 
     return res.json(consolidate);
   } catch (error) {
-    res
-      .status(400)
-      .send(`Error durante la ejecucion por favor intente nuevamente`);
+    res.status(400).send(error.message);
+    // res
+    //   .status(400)
+    //   .send(`Error durante la ejecucion por favor intente nuevamente`);
   }
 });
 
