@@ -9,9 +9,10 @@ const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipe
 
 const respuestaAPI = require("../../../complexSearch.json"),
   respuestaID = require("../../../information.json");
+const { query } = require("express");
 
 router.get("/", async (req, res) => {
-  const { name, page } = req.query;
+  const { name, diet } = req.query;
   try {
     if (name) {
       const recipes = respuestaAPI.results;
@@ -49,25 +50,40 @@ router.get("/", async (req, res) => {
       return res.json(consolidate);
     }
 
-    if (page) {
-      const startIndex = (page - 1) * 9,
-        endIndex = page * 9;
+    if (diet) {
+      const recipes = respuestaAPI.results;
 
-      const recipesAPI = respuestaAPI.results;
-
-      // const recipesAPI = await axios
+      // const recipes = await axios
       //   .get(ALL_RECIPES)
       //   .then((response) => response.data.results);
 
-      const recipesBD = await Recipe.findAll();
+      const resultApi = recipes.filter((recipe) =>
+        recipe.diets.includes(diet.toLowerCase())
+      );
 
-      // const resultBD = queryBD.map((recipe) => recipe.dataValues);
+      const queryBD = await Recipe.findAll({
+        include: {
+          model: Diet,
+          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
+          where: {
+            name: { [Op.iLike]: `%${diet}%` },
+          },
+        },
+      });
 
-      const consolidate = [...recipesAPI, ...recipesBD];
+      const resultBD = queryBD.map((recipe) => recipe.dataValues);
 
-      const result = consolidate.slice(startIndex, endIndex);
+      const consolidate = [...resultApi, ...resultBD];
 
-      res.json(result);
+      if (!consolidate.length)
+        return res.status(404).json({
+          msg: `No puedimos encontrar ninguna receta que contenga la dieta ${diet}`,
+        });
+
+      return res.json(consolidate);
     }
 
     const recipesAPI = respuestaAPI.results;

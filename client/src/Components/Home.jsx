@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Recipe from "./Recipe";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecipes, getRecipesName, getPagination } from "../actions";
+import { getRecipes, getRecipesName, filterDiet } from "../actions";
 
 export default function Home(props) {
   let recipes = useSelector((state) => state.recipes),
@@ -11,13 +11,13 @@ export default function Home(props) {
     { name: "glutenfree", value: "Gluten Free" },
     { name: "ketogenic", value: "Ketogenic" },
     { name: "vegetarian", value: "Vegetarian" },
-    { name: "lactovegetarian", value: "Lacto-Vegetarian" },
-    { name: "ovovegetarian", value: "Ovo-Vegetarian" },
+    { name: "lactovegetarian", value: "Lacto Vegetarian" },
+    { name: "ovovegetarian", value: "Ovo Vegetarian" },
     { name: "vegan", value: "Vegan" },
     { name: "pescetarian", value: "Pescetarian" },
     { name: "paleo", value: "Paleo" },
     { name: "primal", value: "Primal" },
-    { name: "lowfodmap", value: "Low-FODMAP" },
+    { name: "lowfodmap", value: "Low FODMAP" },
     { name: "whole30", value: "Whole30" },
   ];
 
@@ -43,9 +43,22 @@ export default function Home(props) {
     event.preventDefault();
     setSearch(event.target.value);
     dispatch(getRecipesName(event.target.value));
+    clearFilters();
   };
 
-  const handleChangeDiets = (event) => {};
+  const handleChangeDiets = (event) => {
+    // setFilter(event.target.value);
+    setPagination(1);
+    dispatch(filterDiet(event.target.value));
+  };
+
+  const clearFilters = () => {
+    document.getElementsByName("diet").forEach((element) => {
+      element.checked = false;
+    });
+    setPagination(1)
+    // dispatch(getRecipes());
+  };
 
   const handleChangeFilters = (event) => {
     event.preventDefault();
@@ -65,29 +78,28 @@ export default function Home(props) {
       recipes.sort((a, b) => a.healthScore - b.healthScore);
       setFilter(event.target.value);
     }
+    if (event.target.value === "most") {
+      dispatch(getRecipes());
+    }
   };
 
+  const startIndex = (pagination - 1) * 9,
+    endIndex = pagination * 9,
+    totalPage = recipes.length / 9;
   const handleChangePage = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     if (event.target.value === "next") {
       setPagination(pagination + 1);
     }
     if (event.target.value === "previous") {
       setPagination(pagination - 1);
     }
-
-    // console.log(pagination + 1);
-    dispatch(getPagination(pagination + 1));
   };
 
-  // useEffect(() => {
-  //   //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
-  //   dispatch(getRecipes());
-  // }, [dispatch]);
-
   useEffect(() => {
-    dispatch(getPagination(pagination));
-  }, [dispatch, pagination]);
+    //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
+    dispatch(getRecipes());
+  }, [dispatch]);
 
   return (
     <div>
@@ -107,18 +119,20 @@ export default function Home(props) {
         {recipes.msg ? (
           <p>{recipes.msg}</p>
         ) : (
-          recipes.map((recipe) => (
-            <Recipe
-              key={recipe.id}
-              id={recipe.id}
-              image={recipe.image}
-              title={recipe.title}
-              vegetarian={recipe.vegetarian}
-              vegan={recipe.vegan}
-              glutenFree={recipe.glutenFree}
-              healthScore={recipe.healthScore}
-            />
-          ))
+          recipes
+            .slice(startIndex, endIndex)
+            .map((recipe) => (
+              <Recipe
+                key={recipe.id}
+                id={recipe.id}
+                image={recipe.image}
+                title={recipe.title}
+                vegetarian={recipe.vegetarian}
+                vegan={recipe.vegan}
+                glutenFree={recipe.glutenFree}
+                healthScore={recipe.healthScore}
+              />
+            ))
         )}
       </div>
 
@@ -139,19 +153,20 @@ export default function Home(props) {
           <input
             type="radio"
             name="diet"
-            value={diet.name}
+            value={diet.value}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>{diet.value}</label>
         </div>
       ))}
+      <button onClick={clearFilters}>Limpiar Filtros</button>
 
       <br />
       <hr />
       <br />
       <h2>Filtros</h2>
       <select name="sortBy" onChange={(e) => handleChangeFilters(e)}>
-        <option value>Seleccione una Opcion</option>
+        <option value={"most"}>Mas Relevantes</option>
         <option value={"asc"}>Alfabetico Ascendente</option>
         <option value={"desc"}>Alfabetico Descendente</option>
         <option value={"max"}>Health Score Max.</option>
@@ -167,9 +182,11 @@ export default function Home(props) {
           {"< Anterior"}
         </button>
       )}
-      <button onClick={(e) => handleChangePage(e)} value={"next"}>
-        {"Siguiente >"}
-      </button>
+      {pagination < totalPage && (
+        <button onClick={(e) => handleChangePage(e)} value={"next"}>
+          {"Siguiente >"}
+        </button>
+      )}
     </div>
   );
 }

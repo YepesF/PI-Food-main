@@ -4,7 +4,6 @@ import {
   SET_RECIPE,
   SET_RECIPES,
   SET_RECIPES_NAME,
-  PAGINATION,
 } from "../actions";
 
 let id = 1;
@@ -13,7 +12,6 @@ const initialState = {
   recipes: [],
   detailRecipe: {},
   filters: [],
-  pagination: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -43,13 +41,6 @@ export default function reducer(state = initialState, action) {
       };
 
     case FILTER_DIET:
-      return {
-        ...state,
-        recipes: action.payload,
-      };
-
-    case PAGINATION:
-      console.log("pasé");
       return {
         ...state,
         recipes: action.payload,
