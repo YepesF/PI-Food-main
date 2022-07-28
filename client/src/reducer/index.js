@@ -12,6 +12,8 @@ let id = 1;
 const initialState = {
   recipes: [],
   detailRecipe: {},
+  filters: [],
+  pagination: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -47,6 +49,7 @@ export default function reducer(state = initialState, action) {
       };
 
     case PAGINATION:
+      console.log("pasé");
       return {
         ...state,
         recipes: action.payload,

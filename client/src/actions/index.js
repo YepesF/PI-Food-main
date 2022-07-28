@@ -46,9 +46,12 @@ export function filterDiet(recipes) {
 }
 
 export function getPagination(page) {
+  console.log(page);
   return function (dispatch) {
     return fetch(`http://localhost:3001/recipes?page=${page}`)
       .then((response) => response.json())
-      .then((recipes) => dispatch({ type: PAGINATION, payload: recipes }));
+      .then((recipes) => {
+        dispatch({ type: PAGINATION, payload: recipes });
+      });
   };
 }

@@ -49,7 +49,6 @@ export default function Home(props) {
 
   const handleChangeFilters = (event) => {
     event.preventDefault();
-    console.log(event.target.value);
     if (event.target.value === "asc") {
       recipes.sort((a, b) => a.title.localeCompare(b.title));
       setFilter(event.target.value);
@@ -66,9 +65,6 @@ export default function Home(props) {
       recipes.sort((a, b) => a.healthScore - b.healthScore);
       setFilter(event.target.value);
     }
-    if (event.target.value === "most") {
-      dispatch(getRecipes());
-    }
   };
 
   const handleChangePage = (event) => {
@@ -79,13 +75,19 @@ export default function Home(props) {
     if (event.target.value === "previous") {
       setPagination(pagination - 1);
     }
-    dispatch(getPagination(pagination));
+
+    // console.log(pagination + 1);
+    dispatch(getPagination(pagination + 1));
   };
 
+  // useEffect(() => {
+  //   //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
+  //   dispatch(getRecipes());
+  // }, [dispatch]);
+
   useEffect(() => {
-    //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
-    dispatch(getRecipes());
-  }, [dispatch]);
+    dispatch(getPagination(pagination));
+  }, [dispatch, pagination]);
 
   return (
     <div>
@@ -149,7 +151,7 @@ export default function Home(props) {
       <br />
       <h2>Filtros</h2>
       <select name="sortBy" onChange={(e) => handleChangeFilters(e)}>
-        <option value={"most"}>Mas Relevantes</option>
+        <option value>Seleccione una Opcion</option>
         <option value={"asc"}>Alfabetico Ascendente</option>
         <option value={"desc"}>Alfabetico Descendente</option>
         <option value={"max"}>Health Score Max.</option>
