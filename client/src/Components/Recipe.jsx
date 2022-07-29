@@ -5,10 +5,7 @@ export default function Recipe({
   id,
   image,
   title,
-  typediet,
-  vegetarian,
-  vegan,
-  glutenFree,
+  diets,
   healthScore,
 }) {
   return (
@@ -17,12 +14,8 @@ export default function Recipe({
       <NavLink to={`/recipes/detail/${id}`}>
         <h2>{title}</h2>
       </NavLink>
-      <p>{typediet}</p>
       <p>{healthScore}</p>
-      <p>
-        {vegetarian && "Vegetarian "} {vegan && "Vegan"}{" "}
-        {glutenFree && "Gluten Free"}
-      </p>
+      {diets && diets.map(diet => (<p>{diet}</p>))}
     </div>
   );
 }

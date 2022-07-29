@@ -41,6 +41,7 @@ export default function Home(props) {
 
   const handleChange = (event) => {
     event.preventDefault();
+    setPagination(1);
     document.getElementsByName("diet").forEach((element) => {
       element.checked = false;
     });
@@ -49,6 +50,8 @@ export default function Home(props) {
     setSearch(event.target.value);
 
     dispatch(getRecipesName(event.target.value));
+
+
     // clearFilters();
   };
 
@@ -86,12 +89,17 @@ export default function Home(props) {
     }
     if (event.target.value === "most") {
       dispatch(getRecipes());
+      document.getElementsByName("diet").forEach((element) => {
+        element.checked = false;
+      });
     }
   };
 
   const startIndex = (pagination - 1) * 9,
     endIndex = pagination * 9,
     totalPage = recipes.length / 9;
+
+
   const handleChangePage = (event) => {
     // event.preventDefault();
     if (event.target.value === "next") {
@@ -133,9 +141,7 @@ export default function Home(props) {
                 id={recipe.id}
                 image={recipe.image}
                 title={recipe.title}
-                vegetarian={recipe.vegetarian}
-                vegan={recipe.vegan}
-                glutenFree={recipe.glutenFree}
+                diets={recipe.diets}
                 healthScore={recipe.healthScore}
               />
             ))

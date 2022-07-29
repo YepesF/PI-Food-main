@@ -8,23 +8,22 @@ export default function DetailRecipe(props) {
 
   let dispatch = useDispatch(); //Obtengo el dispatch
 
-  let detailRecipe = useSelector((state) => state.detailRecipe); //Obtengo informacion del estado global.
-
   useEffect(() => {
     //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
     dispatch(getRecipe(id));
   }, [id, dispatch]);
 
+  let detailRecipe = useSelector((state) => state.detailRecipe); //Obtengo informacion del estado global.
+
   return (
     <div>
       <h1>Detalle Receta {id}</h1>
-      {console.log(detailRecipe)}
       {detailRecipe ? (
         <div>
           <img src={detailRecipe.image} alt="Aun No Hay Imagen" />
           <h2>{detailRecipe.title}</h2>
           <p>{detailRecipe.dishTypes}</p>
-          <p>{detailRecipe.diets}</p>
+          {detailRecipe.diets && detailRecipe.diets.map((diet, current) => (<p key={`dt${current}`}>{diet}</p>))}
           <div dangerouslySetInnerHTML={{ __html: detailRecipe.summary }} />
           <p>{detailRecipe.healthScore}</p>
           <div

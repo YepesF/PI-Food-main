@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
@@ -38,7 +38,12 @@ router.get("/", async (req, res) => {
         },
       });
 
-      const resultBD = queryBD.map((recipe) => recipe.dataValues);
+      const resultBD = queryBD.map((recipe) => {
+        return {
+          ...recipe.dataValues,
+          diets: recipe.diets.map((diet) => diet.name),
+        };
+      });
 
       const consolidate = [...resultApi, ...resultBD];
 
@@ -74,7 +79,12 @@ router.get("/", async (req, res) => {
         },
       });
 
-      const resultBD = queryBD.map((recipe) => recipe.dataValues);
+      const resultBD = queryBD.map((recipe) => {
+        return {
+          ...recipe.dataValues,
+          diets: recipe.diets.map((diet) => diet.name),
+        };
+      });
 
       const consolidate = [...resultApi, ...resultBD];
 
@@ -92,7 +102,32 @@ router.get("/", async (req, res) => {
     //   .get(ALL_RECIPES)
     //   .then((response) => response.data.results);
 
-    const recipesBD = await Recipe.findAll();
+    // const recipesBD = await Recipe.findAll({
+    //   include: {
+    //     model: Diet,
+    //     attributes: ["name"],
+    //     through: {
+    //       attributes: [],
+    //     },
+    //   },
+    // });
+
+    const queryBD = await Recipe.findAll({
+      include: {
+        model: Diet,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
+      },
+    });
+
+    const recipesBD = queryBD.map((recipe) => {
+      return {
+        ...recipe.dataValues,
+        diets: recipe.diets.map((diet) => diet.name),
+      };
+    });
 
     // const resultBD = queryBD.map((recipe) => recipe.dataValues);
 
@@ -117,10 +152,9 @@ router.get("/:idRecipe", async (req, res) => {
   // [] Paso a paso
 
   try {
-    let recipeAPI, recipeBD;
+    let recipeAPI, queryBD, recipeBD;
     if (Number(idRecipe)) {
       recipeAPI = respuestaID;
-      console.log(recipeAPI);
       // recipeAPI = await axios
       //   .get(
       //     `https://api.spoonacular.com/recipes/${Number(
@@ -129,7 +163,7 @@ router.get("/:idRecipe", async (req, res) => {
       //   )
       //   .then((response) => response.data);
     } else {
-      recipeBD = await Recipe.findByPk(idRecipe, {
+      queryBD = await Recipe.findByPk(idRecipe, {
         include: {
           model: Diet,
           attributes: ["name"],
@@ -138,6 +172,10 @@ router.get("/:idRecipe", async (req, res) => {
           },
         },
       });
+
+      const mapDiets = queryBD.diets.map((diet) => diet.name);
+
+      recipeBD = { ...queryBD.dataValues, diets: mapDiets };
 
       if (!recipeBD)
         return res
@@ -180,8 +218,6 @@ router.post("/", async (req, res) => {
   // [ ] Botón/Opción para crear una nueva receta
   const { title, summary, healthScore, instructions, diets, image, dishTypes } =
     req.body;
-
-  console.log(instructions);
 
   try {
     if (!title)
@@ -250,14 +286,14 @@ router.post("/", async (req, res) => {
         model: Diet,
         attributes: ["name"],
         through: {
-          attributes: ["name"],
+          attributes: [],
         },
       },
     });
 
-    console.log(recipe.diets);
+    const mapDiets = recipe.diets.map((diet) => diet.name);
 
-    res.json(recipe);
+    res.json({ ...recipe.dataValues, diets: mapDiets });
   } catch (error) {
     res.status(400).send(error.message);
     // res.status(400).send(`Error durante la ejecucion por favor intente nuevamente`);
