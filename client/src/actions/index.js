@@ -4,10 +4,22 @@ export const CREATE_RECIPE = "CREATE_RECIPE",
   SET_RECIPES_NAME = "SET_RECIPES_NAME",
   FILTER_DIET = "FILTER_DIET";
 
+// export function createRecipe(recipe) {
+//   return {
+//     type: CREATE_RECIPE,
+//     payload: recipe,
+//   };
+// }
+
 export function createRecipe(recipe) {
-  return {
-    type: CREATE_RECIPE,
-    payload: recipe,
+  return function (dispatch) {
+    return fetch(`http://localhost:3001/recipes`, {
+      method: "POST",
+      body: JSON.stringify(recipe),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((recipe) => dispatch({ type: SET_RECIPE, payload: recipe }));
   };
 }
 

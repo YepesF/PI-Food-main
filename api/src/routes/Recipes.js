@@ -109,6 +109,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:idRecipe", async (req, res) => {
   const { idRecipe } = req.params;
+  console.log(idRecipe);
 
   // [] Los campos mostrados en la ruta principal para cada receta (imagen, nombre, tipo de plato y tipo de dieta)
   // [] Resumen del plato
@@ -119,6 +120,7 @@ router.get("/:idRecipe", async (req, res) => {
     let recipeAPI, recipeBD;
     if (Number(idRecipe)) {
       recipeAPI = respuestaID;
+      console.log(recipeAPI);
       // recipeAPI = await axios
       //   .get(
       //     `https://api.spoonacular.com/recipes/${Number(
@@ -176,15 +178,10 @@ router.post("/", async (req, res) => {
   // Paso a paso
   // [ ] Posibilidad de seleccionar/agregar uno o más tipos de dietas
   // [ ] Botón/Opción para crear una nueva receta
-  const {
-    title,
-    summary,
-    healthScore,
-    analyzedInstructions,
-    diets,
-    image,
-    dishTypes,
-  } = req.body;
+  const { title, summary, healthScore, instructions, diets, image, dishTypes } =
+    req.body;
+
+  console.log(instructions);
 
   try {
     if (!title)
@@ -238,7 +235,7 @@ router.post("/", async (req, res) => {
       title,
       summary,
       healthScore,
-      analyzedInstructions,
+      instructions,
       image,
       dishTypes,
     });
@@ -253,10 +250,12 @@ router.post("/", async (req, res) => {
         model: Diet,
         attributes: ["name"],
         through: {
-          attributes: [],
+          attributes: ["name"],
         },
       },
     });
+
+    console.log(recipe.diets);
 
     res.json(recipe);
   } catch (error) {

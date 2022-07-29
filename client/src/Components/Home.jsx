@@ -3,23 +3,23 @@ import Recipe from "./Recipe";
 import { useDispatch, useSelector } from "react-redux";
 import { getRecipes, getRecipesName, filterDiet } from "../actions";
 
+export const firtsDiets = [
+  { name: "glutenfree", value: "Gluten Free" },
+  { name: "ketogenic", value: "Ketogenic" },
+  { name: "vegetarian", value: "Vegetarian" },
+  { name: "lactovegetarian", value: "Lacto Vegetarian" },
+  { name: "ovovegetarian", value: "Ovo Vegetarian" },
+  { name: "vegan", value: "Vegan" },
+  { name: "pescetarian", value: "Pescetarian" },
+  { name: "paleo", value: "Paleo" },
+  { name: "primal", value: "Primal" },
+  { name: "lowfodmap", value: "Low FODMAP" },
+  { name: "whole30", value: "Whole30" },
+];
+
 export default function Home(props) {
   let recipes = useSelector((state) => state.recipes),
     dispatch = useDispatch(); //Obtengo informacion del estado global.
-
-  const firtsDiets = [
-    { name: "glutenfree", value: "Gluten Free" },
-    { name: "ketogenic", value: "Ketogenic" },
-    { name: "vegetarian", value: "Vegetarian" },
-    { name: "lactovegetarian", value: "Lacto Vegetarian" },
-    { name: "ovovegetarian", value: "Ovo Vegetarian" },
-    { name: "vegan", value: "Vegan" },
-    { name: "pescetarian", value: "Pescetarian" },
-    { name: "paleo", value: "Paleo" },
-    { name: "primal", value: "Primal" },
-    { name: "lowfodmap", value: "Low FODMAP" },
-    { name: "whole30", value: "Whole30" },
-  ];
 
   // let [checked, setChecked] = useState({
   //   glutenfree: false,
@@ -41,9 +41,15 @@ export default function Home(props) {
 
   const handleChange = (event) => {
     event.preventDefault();
+    document.getElementsByName("diet").forEach((element) => {
+      element.checked = false;
+    });
+
+    document.getElementsByTagName("select")[0].value = "most";
     setSearch(event.target.value);
+
     dispatch(getRecipesName(event.target.value));
-    clearFilters();
+    // clearFilters();
   };
 
   const handleChangeDiets = (event) => {
@@ -56,7 +62,7 @@ export default function Home(props) {
     document.getElementsByName("diet").forEach((element) => {
       element.checked = false;
     });
-    setPagination(1)
+    setPagination(1);
     // dispatch(getRecipes());
   };
 

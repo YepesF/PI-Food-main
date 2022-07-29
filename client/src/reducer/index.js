@@ -6,8 +6,6 @@ import {
   SET_RECIPES_NAME,
 } from "../actions";
 
-let id = 1;
-
 const initialState = {
   recipes: [],
   detailRecipe: {},
@@ -19,7 +17,7 @@ export default function reducer(state = initialState, action) {
     case CREATE_RECIPE:
       return {
         ...state,
-        recipes: [...state.recipes, { ...action.payload, id: id++ }],
+        recipes: [...state.recipes, { ...action.payload }],
       };
 
     case SET_RECIPE:

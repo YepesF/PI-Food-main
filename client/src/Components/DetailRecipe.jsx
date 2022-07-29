@@ -18,10 +18,13 @@ export default function DetailRecipe(props) {
   return (
     <div>
       <h1>Detalle Receta {id}</h1>
+      {console.log(detailRecipe)}
       {detailRecipe ? (
         <div>
           <img src={detailRecipe.image} alt="Aun No Hay Imagen" />
           <h2>{detailRecipe.title}</h2>
+          <p>{detailRecipe.dishTypes}</p>
+          <p>{detailRecipe.diets}</p>
           <div dangerouslySetInnerHTML={{ __html: detailRecipe.summary }} />
           <p>{detailRecipe.healthScore}</p>
           <div

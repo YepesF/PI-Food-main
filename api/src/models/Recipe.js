@@ -55,8 +55,8 @@ module.exports = (sequelize) => {
           },
         },
       },
-      analyzedInstructions: {
-        type: DataTypes.ARRAY(DataTypes.JSON),
+      instructions: {
+        type: DataTypes.STRING,
       },
       image: {
         type: DataTypes.TEXT,

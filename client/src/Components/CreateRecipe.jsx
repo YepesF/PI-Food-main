@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { createRecipe } from "../actions";
 import { useDispatch } from "react-redux";
+import { firtsDiets } from "./Home";
 
 export function validate(recipe) {
   let error = {};
@@ -28,7 +29,7 @@ export function validate(recipe) {
   }
 
   if (
-    !/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(
+    !/^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(
       recipe.image
     )
   ) {
@@ -77,7 +78,6 @@ export default function CreateRecipe() {
 
   const handleChangeDiets = (event) => {
     // event.preventDefault();
-    console.log(event.target.name);
     if (event.target.checked) {
       setRecipe((prev) => ({
         ...prev,
@@ -194,106 +194,18 @@ export default function CreateRecipe() {
 
         <br />
 
-        <div>
-          <input
-            type="checkbox"
-            name={"glutenfree"}
-            value={"Gluten Free"}
-            checked={checked.glutenfree}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Gluten Free</label>
-
-          <input
-            type="checkbox"
-            name={"ketogenic"}
-            value={"Ketogenic"}
-            checked={checked.ketogenic}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Ketogenic</label>
-
-          <input
-            type="checkbox"
-            name={"vegetarian"}
-            value={"Vegetarian"}
-            checked={checked.vegetarian}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Vegetarian</label>
-
-          <input
-            type="checkbox"
-            name={"lactovegetarian"}
-            value={"Lacto Vegetarian"}
-            checked={checked.lactovegetarian}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Lacto-Vegetarian</label>
-
-          <input
-            type="checkbox"
-            name={"ovovegetarian"}
-            value={"Ovo Vegetarian"}
-            checked={checked.ovovegetarian}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Ovo-Vegetarian</label>
-
-          <input
-            type="checkbox"
-            name={"vegan"}
-            value={"Vegan"}
-            checked={checked.vegan}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Vegan</label>
-
-          <input
-            type="checkbox"
-            name={"pescetarian"}
-            value={"Pescetarian"}
-            checked={checked.pescetarian}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Pescetarian</label>
-
-          <input
-            type="checkbox"
-            name={"paleo"}
-            value={"Paleo"}
-            checked={checked.paleo}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Paleo</label>
-
-          <input
-            type="checkbox"
-            name={"primal"}
-            value={"Primal"}
-            checked={checked.primal}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Primal</label>
-
-          <input
-            type="checkbox"
-            name={"lowfodmap"}
-            value={"Low FODMAP"}
-            checked={checked.lowfodmap}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Low FODMAP</label>
-
-          <input
-            type="checkbox"
-            name={"whole30"}
-            value={"Whole30"}
-            checked={checked.whole30}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>Whole30</label>
-        </div>
+        {firtsDiets.map((diet, current) => (
+          <div key={`CB${current}`}>
+            <input
+              type={"checkbox"}
+              name={diet.name}
+              value={diet.value}
+              checked={checked[diet.name]}
+              onChange={(e) => handleChangeDiets(e)}
+            />
+            <label>{diet.value}</label>
+          </div>
+        ))}
 
         <br />
 
