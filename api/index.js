@@ -25,8 +25,8 @@ const firtsDiets = [
   "Gluten Free",
   "Ketogenic",
   "Vegetarian",
-  "Lacto-Vegetarian",
-  "Ovo-Vegetarian",
+  "Lacto Vegetarian",
+  "Ovo Vegetarian",
   "Vegan",
   "Pescetarian",
   "Paleo",
@@ -40,7 +40,7 @@ conn.sync({ alter: true }).then(() => {
   server.listen(3001, async () => {
     firtsDiets.forEach((diet) => {
       Diet.findOrCreate({
-        where: { name: diet },
+        where: { name: diet.toLocaleLowerCase() },
       });
     });
 

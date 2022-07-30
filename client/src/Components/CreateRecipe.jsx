@@ -20,11 +20,11 @@ export function validate(recipe) {
       "El resumen de la receta es invalido, no puede contener espacios al inicio del texto.";
   }
 
-  if (!/^[0-9]*$/.test(recipe.healthscore)) {
-    error.healthscore =
+  if (!/^[0-9]*$/.test(recipe.healthScore)) {
+    error.healthScore =
       "El nivel de comida saludable es invalido, solo se admiten numeros.";
-  } else if (recipe.healthscore > 100 || recipe.healthscore < 0) {
-    error.healthscore =
+  } else if (recipe.healthScore > 100 || recipe.healthScore < 0) {
+    error.healthScore =
       "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0.";
   }
 
@@ -43,7 +43,7 @@ export default function CreateRecipe() {
   let [recipe, setRecipe] = useState({
     title: "",
     summary: "",
-    healthscore: 0,
+    healthScore: 0,
     instructions: "",
     image: "",
     diets: [],
@@ -81,13 +81,13 @@ export default function CreateRecipe() {
     if (event.target.checked) {
       setRecipe((prev) => ({
         ...prev,
-        diets: [...recipe.diets, event.target.value],
+        diets: [...prev.diets, event.target.value],
       }));
       setChecked((prev) => ({ ...prev, [event.target.name]: true }));
     } else {
       setRecipe((prev) => ({
         ...prev,
-        diets: recipe.diets.filter((e) => e !== event.target.value),
+        diets: prev.diets.filter((e) => e !== event.target.value),
       }));
       setChecked((prev) => ({ ...prev, [event.target.name]: false }));
     }
@@ -102,7 +102,7 @@ export default function CreateRecipe() {
     setRecipe({
       title: "",
       summary: "",
-      healthscore: 0,
+      healthScore: 0,
       instructions: "",
       image: "",
       diets: [],
@@ -159,11 +159,11 @@ export default function CreateRecipe() {
           <label>Nivel de Comida Saludable</label>
           <input
             type={"text"}
-            name={"healthscore"}
-            value={recipe.healthscore}
+            name={"healthScore"}
+            value={recipe.healthScore}
             onChange={(e) => handleChange(e)}
           />
-          {error.healthscore && <p>{error.healthscore}</p>}
+          {error.healthScore && <p>{error.healthScore}</p>}
         </div>
 
         <br />
@@ -199,7 +199,7 @@ export default function CreateRecipe() {
             <input
               type={"checkbox"}
               name={diet.name}
-              value={diet.value}
+              value={diet.value.toLocaleLowerCase()}
               checked={checked[diet.name]}
               onChange={(e) => handleChangeDiets(e)}
             />

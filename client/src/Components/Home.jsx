@@ -51,7 +51,6 @@ export default function Home(props) {
 
     dispatch(getRecipesName(event.target.value));
 
-
     // clearFilters();
   };
 
@@ -98,7 +97,6 @@ export default function Home(props) {
   const startIndex = (pagination - 1) * 9,
     endIndex = pagination * 9,
     totalPage = recipes.length / 9;
-
 
   const handleChangePage = (event) => {
     // event.preventDefault();
@@ -155,17 +153,10 @@ export default function Home(props) {
 
       {firtsDiets.map((diet, current) => (
         <div key={`D${current}`}>
-          {/* <input
-            type="checkbox"
-            name={diet.name}
-            value={diet.value}
-            checked={checked[diet.name]}
-            onChange={(e) => handleChangeDiets(e)}
-          /> */}
           <input
             type="radio"
             name="diet"
-            value={diet.value}
+            value={diet.value.toLocaleLowerCase()}
             onChange={(e) => handleChangeDiets(e)}
           />
           <label>{diet.value}</label>
