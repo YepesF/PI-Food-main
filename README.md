@@ -89,6 +89,8 @@ La idea general es crear una aplicación en la cual se puedan ver distintas rece
   - Para obtener mayor información sobre las recetas, como por ejemplo el tipo de dieta deben agregar el flag `&addRecipeInformation=true - https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=d72185a133464f6ea1a0c56941498c72` a este endpoint
   - Para los tipos de dieta deben tener en cuenta las propiedades vegetarian, vegan, glutenFree por un lado y también analizar las que se incluyan dentro de la propiedad `diets`
 - GET <https://api.spoonacular.com/recipes/{id}/information>
+- API_KEY1=d72185a133464f6ea1a0c56941498c72
+- API_KEY2=a193ceb4e1f148809217c13855ec4f94
 
 ### Requerimientos mínimos
 
@@ -98,8 +100,8 @@ A continuación se detallaran los requerimientos mínimos para la aprobación de
 
 #### Tecnologías necesarias
 
-- [ ] React
-- [ ] Redux
+- [*] React
+- [*] Redux
 - [*] Express
 - [*] Sequelize - Postgres
 
@@ -109,7 +111,7 @@ Se debe desarrollar una aplicación de React/Redux que contenga las siguientes p
 
 **Pagina inicial**: deben armar una landing page con
 
-- [ ] Alguna imagen de fondo representativa al proyecto
+- [*] Alguna imagen de fondo representativa al proyecto
 - [*] Botón para ingresar al home (`Ruta principal`)
 
 **Ruta principal**: debe contener
