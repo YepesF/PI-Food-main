@@ -46,9 +46,9 @@ router.get("/", async (req, res) => {
     const recipesAPI = await getAllRecipesApi();
     const recipesBD = await getAllRecipesBD();
 
-    const consolidate = [...recipesAPI, ...recipesBD];
+    // const consolidate = [...recipesAPI, ...recipesBD];
 
-    return res.json(consolidate);
+    return res.json([recipesAPI, recipesBD]);
   } catch (error) {
     res.status(400).send(error.message);
     // res

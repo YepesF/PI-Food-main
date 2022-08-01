@@ -7,13 +7,30 @@ import {
 } from "../actions";
 
 const initialState = {
-  recipes: [],
+  recipesAPI: [],
+  recipesBD: [],
   detailRecipe: {},
-  filters: [],
+  results: [],
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case SET_RECIPES:
+      return {
+        ...state,
+        recipes: action.payload,
+      };
+
+    case SET_RECIPES_NAME:
+      const filterApi = state.recipes.filter((recipe) => {
+        return recipe.title.toLowerCase().includes(action.title.toLowerCase());
+      });
+
+      return {
+        ...state,
+        results: [...filterApi, ...action.payload],
+      };
+
     case CREATE_RECIPE:
       return {
         ...state,
@@ -24,18 +41,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         detailRecipe: action.payload,
-      };
-
-    case SET_RECIPES:
-      return {
-        ...state,
-        recipes: action.payload,
-      };
-
-    case SET_RECIPES_NAME:
-      return {
-        ...state,
-        recipes: action.payload,
       };
 
     case FILTER_DIET:

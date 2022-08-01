@@ -21,25 +21,11 @@ export default function Home(props) {
   let recipes = useSelector((state) => state.recipes),
     dispatch = useDispatch(); //Obtengo informacion del estado global.
 
-  // let [checked, setChecked] = useState({
-  //   glutenfree: false,
-  //   ketogenic: false,
-  //   vegetarian: false,
-  //   lactovegetarian: false,
-  //   ovovegetarian: false,
-  //   vegan: false,
-  //   pescetarian: false,
-  //   paleo: false,
-  //   primal: false,
-  //   lowfodmap: false,
-  //   whole30: false,
-  // });
-
   let [search, setSearch] = useState(""),
     [filter, setFilter] = useState(""),
     [pagination, setPagination] = useState(1);
 
-  const handleChange = (event) => {
+  const searchRecipes = (event) => {
     event.preventDefault();
     setPagination(1);
     document.getElementsByName("diet").forEach((element) => {
@@ -121,7 +107,7 @@ export default function Home(props) {
         placeholder="Ingrese la receta a buscar"
         name={"search"}
         value={search}
-        onChange={(e) => handleChange(e)}
+        onChange={(e) => searchRecipes(e)}
       />
       <br />
       <hr />

@@ -4,12 +4,24 @@ export const CREATE_RECIPE = "CREATE_RECIPE",
   SET_RECIPES_NAME = "SET_RECIPES_NAME",
   FILTER_DIET = "FILTER_DIET";
 
-// export function createRecipe(recipe) {
-//   return {
-//     type: CREATE_RECIPE,
-//     payload: recipe,
-//   };
-// }
+export function getRecipes() {
+  console.log("Le Pedi A La API");
+  return function (dispatch) {
+    return fetch("http://localhost:3001/recipes")
+      .then((response) => response.json())
+      .then((recipes) => dispatch({ type: SET_RECIPES, payload: recipes }));
+  };
+}
+
+export function getRecipesName(title) {
+  return function (dispatch) {
+    return fetch(`http://localhost:3001/recipes?name=${title}`)
+      .then((response) => response.json())
+      .then((recipes) =>
+        dispatch({ type: SET_RECIPES_NAME, payload: recipes, title })
+      );
+  };
+}
 
 export function createRecipe(recipe) {
   console.log(JSON.stringify(recipe));
@@ -29,24 +41,6 @@ export function getRecipe(id) {
     return fetch(`http://localhost:3001/recipes/${id}`)
       .then((response) => response.json())
       .then((recipe) => dispatch({ type: SET_RECIPE, payload: recipe }));
-  };
-}
-
-export function getRecipes() {
-  return function (dispatch) {
-    return fetch("http://localhost:3001/recipes")
-      .then((response) => response.json())
-      .then((recipes) => dispatch({ type: SET_RECIPES, payload: recipes }));
-  };
-}
-
-export function getRecipesName(title) {
-  return function (dispatch) {
-    return fetch(`http://localhost:3001/recipes?name=${title}`)
-      .then((response) => response.json())
-      .then((recipes) =>
-        dispatch({ type: SET_RECIPES_NAME, payload: recipes })
-      );
   };
 }
 

@@ -91,6 +91,7 @@ La idea general es crear una aplicación en la cual se puedan ver distintas rece
 - GET <https://api.spoonacular.com/recipes/{id}/information>
 - API_KEY1=d72185a133464f6ea1a0c56941498c72
 - API_KEY2=a193ceb4e1f148809217c13855ec4f94
+- API_KEY3=9b0263ddc8a1401889e51eb1ba76c768
 
 ### Requerimientos mínimos
 
