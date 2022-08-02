@@ -2,10 +2,12 @@ export const CREATE_RECIPE = "CREATE_RECIPE",
   SET_RECIPES = "SET_RECIPES",
   SET_RECIPE = "SET_RECIPE",
   SET_RECIPES_NAME = "SET_RECIPES_NAME",
-  FILTER_DIET = "FILTER_DIET";
+  FILTER_DIET = "FILTER_DIET",
+  ALL_RECIPES = "ALL_RECIPES",
+  SET_OTHER_FILTER = "SET_OTHER_FILTER",
+  SET_DEFAULT_RECIPES = "SET_DEFAULT_RECIPES";
 
 export function getRecipes() {
-  console.log("Le Pedi A La API");
   return function (dispatch) {
     return fetch("http://localhost:3001/recipes")
       .then((response) => response.json())
@@ -18,9 +20,13 @@ export function getRecipesName(title) {
     return fetch(`http://localhost:3001/recipes?name=${title}`)
       .then((response) => response.json())
       .then((recipes) =>
-        dispatch({ type: SET_RECIPES_NAME, payload: recipes, title })
+        dispatch({ type: SET_RECIPES_NAME, payload: recipes })
       );
   };
+}
+
+export function defaultRecepes() {
+  return { type: SET_DEFAULT_RECIPES };
 }
 
 export function createRecipe(recipe) {
@@ -45,11 +51,9 @@ export function getRecipe(id) {
 }
 
 export function filterDiet(diet) {
-  return function (dispatch) {
-    return fetch(`http://localhost:3001/recipes?diet=${diet}`)
-      .then((response) => response.json())
-      .then((recipes) =>
-        dispatch({ type: SET_RECIPES_NAME, payload: recipes })
-      );
-  };
+  return { type: FILTER_DIET, payload: diet };
+}
+
+export function othersFilters(recipes) {
+  return { type: SET_OTHER_FILTER, payload: recipes };
 }

@@ -15,6 +15,8 @@ const {
   getRecipeBDById,
   getAllRecipesBDbyName,
   getAllRecipesBDbyDiet,
+  getAllRecipesApibyName,
+  getAllRecipesApibyDiet,
 } = require("../controllers/recipes");
 
 router.get("/", async (req, res) => {
@@ -22,7 +24,10 @@ router.get("/", async (req, res) => {
 
   try {
     if (name) {
-      const recipes = await getAllRecipesBDbyName(name.toLocaleLowerCase());
+      const recipesAPI = await getAllRecipesApibyName(name);
+      const recipesBD = await getAllRecipesBDbyName(name.toLocaleLowerCase());
+
+      const recipes = [...recipesAPI, ...recipesBD];
 
       if (!recipes.length)
         return res.status(404).json({
@@ -33,7 +38,10 @@ router.get("/", async (req, res) => {
     }
 
     if (diet) {
-      const recipes = await getAllRecipesBDbyDiet(diet.toLocaleLowerCase());
+      const recipesAPI = await getAllRecipesApibyDiet(diet.toLocaleLowerCase());
+      const recipesBD = await getAllRecipesBDbyDiet(diet.toLocaleLowerCase());
+
+      const recipes = [...recipesAPI, ...recipesBD];
 
       if (!recipes.length)
         return res.status(404).json({
@@ -42,13 +50,12 @@ router.get("/", async (req, res) => {
 
       return res.json(recipes);
     }
-
     const recipesAPI = await getAllRecipesApi();
     const recipesBD = await getAllRecipesBD();
 
-    // const consolidate = [...recipesAPI, ...recipesBD];
+    const recipes = [...recipesAPI, ...recipesBD];
 
-    return res.json([recipesAPI, recipesBD]);
+    return res.json(recipes);
   } catch (error) {
     res.status(400).send(error.message);
     // res

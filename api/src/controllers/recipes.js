@@ -79,10 +79,17 @@ const getAllRecipesBD = async () => {
   });
 };
 
-const getAllRecipesBDbyName = async (value) => {
+const getAllRecipesApibyName = async (name) => {
+  const recipesAPI = await getAllRecipesApi();
+  return recipesAPI.filter((recipe) => {
+    return recipe.title.toLowerCase().includes(name.toLowerCase());
+  });
+};
+
+const getAllRecipesBDbyName = async (name) => {
   const queryBD = await Recipe.findAll({
     where: {
-      title: { [Op.iLike]: `%${value}%` },
+      title: { [Op.iLike]: `%${name}%` },
     },
     include: {
       model: Diet,
@@ -98,6 +105,13 @@ const getAllRecipesBDbyName = async (value) => {
       ...recipe.dataValues,
       diets: recipe.diets.map((diet) => diet.name),
     };
+  });
+};
+
+const getAllRecipesApibyDiet = async (diet) => {
+  const recipesAPI = await getAllRecipesApi();
+  return recipesAPI.filter((recipe) => {
+    return recipe.diets.includes(diet.toLowerCase());
   });
 };
 
@@ -128,7 +142,7 @@ const getRecipeApiById = (id) => {
     .get(
       `https://api.spoonacular.com/recipes/${Number(
         id
-      )}/information?apiKey=${API_KEY2}`
+      )}/information?apiKey=${API_KEY3}`
     )
     .then((response) => response.data)
     .catch((err) => null);
@@ -167,4 +181,6 @@ module.exports = {
   getAllRecipesBDbyDiet,
   getRecipeApiById,
   getRecipeBDById,
+  getAllRecipesApibyName,
+  getAllRecipesApibyDiet,
 };

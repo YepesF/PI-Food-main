@@ -36,7 +36,7 @@ const firtsDiets = [
 ];
 
 // Syncing all the models at once.
-conn.sync({ alter: true }).then(() => {
+conn.sync({ force: true }).then(() => {
   server.listen(3001, async () => {
     firtsDiets.forEach((diet) => {
       Diet.findOrCreate({

@@ -215,7 +215,7 @@ export default function CreateRecipe() {
           error.healthscore ||
           !recipe.title ||
           !recipe.summary ? null : (
-            <input type={"submit"} value={"Crear Receta"} id="" />
+            <input type={"submit"} value={"Crear Receta"} />
           )}
         </div>
       </form>

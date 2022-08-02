@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Recipe from "./Recipe";
+import SearchBar from "./SearchBar";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecipes, getRecipesName, filterDiet } from "../actions";
+import { getRecipes } from "../actions";
+import FiltersDiets from "./FiltersDiets";
+import OtherFilters from "./OtherFilters";
 
 export const firtsDiets = [
   { name: "glutenfree", value: "Gluten Free" },
@@ -18,58 +21,28 @@ export const firtsDiets = [
 ];
 
 export default function Home(props) {
-  let recipes = useSelector((state) => state.recipes),
+  let results = useSelector((state) => state.results),
     dispatch = useDispatch(); //Obtengo informacion del estado global.
 
-  let [search, setSearch] = useState(""),
-    [filter, setFilter] = useState(""),
+  let [filter, setFilter] = useState(""),
     [pagination, setPagination] = useState(1);
-
-  const searchRecipes = (event) => {
-    event.preventDefault();
-    setPagination(1);
-    document.getElementsByName("diet").forEach((element) => {
-      element.checked = false;
-    });
-
-    document.getElementsByTagName("select")[0].value = "most";
-    setSearch(event.target.value);
-
-    dispatch(getRecipesName(event.target.value));
-
-    // clearFilters();
-  };
-
-  const handleChangeDiets = (event) => {
-    // setFilter(event.target.value);
-    setPagination(1);
-    dispatch(filterDiet(event.target.value));
-  };
-
-  const clearFilters = () => {
-    document.getElementsByName("diet").forEach((element) => {
-      element.checked = false;
-    });
-    setPagination(1);
-    // dispatch(getRecipes());
-  };
 
   const handleChangeFilters = (event) => {
     event.preventDefault();
     if (event.target.value === "asc") {
-      recipes.sort((a, b) => a.title.localeCompare(b.title));
+      results.sort((a, b) => a.title.localeCompare(b.title));
       setFilter(event.target.value);
     }
     if (event.target.value === "desc") {
-      recipes.sort((a, b) => b.title.localeCompare(a.title));
+      results.sort((a, b) => b.title.localeCompare(a.title));
       setFilter(event.target.value);
     }
     if (event.target.value === "max") {
-      recipes.sort((a, b) => b.healthScore - a.healthScore);
+      results.sort((a, b) => b.healthScore - a.healthScore);
       setFilter(event.target.value);
     }
     if (event.target.value === "min") {
-      recipes.sort((a, b) => a.healthScore - b.healthScore);
+      results.sort((a, b) => a.healthScore - b.healthScore);
       setFilter(event.target.value);
     }
     if (event.target.value === "most") {
@@ -82,7 +55,7 @@ export default function Home(props) {
 
   const startIndex = (pagination - 1) * 9,
     endIndex = pagination * 9,
-    totalPage = recipes.length / 9;
+    totalPage = results.length / 9;
 
   const handleChangePage = (event) => {
     // event.preventDefault();
@@ -102,22 +75,14 @@ export default function Home(props) {
   return (
     <div>
       <h1>Home</h1>
-      <input
-        type="text"
-        placeholder="Ingrese la receta a buscar"
-        name={"search"}
-        value={search}
-        onChange={(e) => searchRecipes(e)}
-      />
-      <br />
-      <hr />
-      <br />
+      <SearchBar />
+
       <h1>Recetas</h1>
       <div>
-        {recipes.msg ? (
-          <p>{recipes.msg}</p>
+        {results.msg ? (
+          <p>{results.msg}</p>
         ) : (
-          recipes
+          results
             .slice(startIndex, endIndex)
             .map((recipe) => (
               <Recipe
@@ -132,38 +97,12 @@ export default function Home(props) {
         )}
       </div>
 
-      <br />
-      <hr />
-      <br />
       <h2>Dietas</h2>
+      <FiltersDiets />
 
-      {firtsDiets.map((diet, current) => (
-        <div key={`D${current}`}>
-          <input
-            type="radio"
-            name="diet"
-            value={diet.value.toLocaleLowerCase()}
-            onChange={(e) => handleChangeDiets(e)}
-          />
-          <label>{diet.value}</label>
-        </div>
-      ))}
-      <button onClick={clearFilters}>Limpiar Filtros</button>
-
-      <br />
-      <hr />
-      <br />
       <h2>Filtros</h2>
-      <select name="sortBy" onChange={(e) => handleChangeFilters(e)}>
-        <option value={"most"}>Mas Relevantes</option>
-        <option value={"asc"}>Alfabetico Ascendente</option>
-        <option value={"desc"}>Alfabetico Descendente</option>
-        <option value={"max"}>Health Score Max.</option>
-        <option value={"min"}>Health Score Min.</option>
-      </select>
-      <br />
-      <hr />
-      <br />
+      <OtherFilters />
+
       <h2>Paginacion</h2>
       <h3>Pagina {pagination}</h3>
       {pagination > 1 && (
@@ -179,11 +118,3 @@ export default function Home(props) {
     </div>
   );
 }
-
-// function mapStateToProps(state) {
-//   return {
-//     recipes: state.recipes,
-//   };
-// }
-
-// export default connect(mapStateToProps)(Home);
