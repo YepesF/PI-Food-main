@@ -11,7 +11,9 @@ const findRecipeByNameBD = async (title) => {
       where: {
         title,
       },
-    })) && "La receta ya existe, por favor ingresar un nombre receta diferente."
+    })) && {
+      msg: "La receta ya existe, por favor ingresar un nombre receta diferente.",
+    }
   );
 };
 
@@ -142,7 +144,7 @@ const getRecipeApiById = (id) => {
     .get(
       `https://api.spoonacular.com/recipes/${Number(
         id
-      )}/information?apiKey=${API_KEY3}`
+      )}/information?apiKey=${API_KEY1}`
     )
     .then((response) => response.data)
     .catch((err) => null);

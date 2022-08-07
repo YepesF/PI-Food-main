@@ -30,7 +30,6 @@ export function defaultRecepes() {
 }
 
 export function createRecipe(recipe) {
-  console.log(JSON.stringify(recipe));
   return function (dispatch) {
     return fetch(`http://localhost:3001/recipes`, {
       method: "POST",
@@ -38,7 +37,7 @@ export function createRecipe(recipe) {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((recipe) => dispatch({ type: SET_RECIPE, payload: recipe }));
+      .then((recipe) => dispatch({ type: CREATE_RECIPE, payload: recipe }));
   };
 }
 

@@ -5,67 +5,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRecipes } from "../actions";
 import FiltersDiets from "./FiltersDiets";
 import OtherFilters from "./OtherFilters";
+import Pagination from "./Pagination";
+
+import style from "./Home.module.css";
 
 export const firtsDiets = [
-  { name: "glutenfree", value: "Gluten Free" },
-  { name: "ketogenic", value: "Ketogenic" },
-  { name: "vegetarian", value: "Vegetarian" },
-  { name: "lactovegetarian", value: "Lacto Vegetarian" },
-  { name: "ovovegetarian", value: "Ovo Vegetarian" },
-  { name: "vegan", value: "Vegan" },
-  { name: "pescetarian", value: "Pescetarian" },
-  { name: "paleo", value: "Paleo" },
-  { name: "primal", value: "Primal" },
-  { name: "lowfodmap", value: "Low FODMAP" },
-  { name: "whole30", value: "Whole30" },
+  { name: "Gluten Free", value: "glutenfree" },
+  { name: "Ketogenic", value: "ketogenic" },
+  { name: "Vegetarian", value: "vegetarian" },
+  { name: "Lacto Vegetarian", value: "lactovegetarian" },
+  { name: "Ovo Vegetarian", value: "ovovegetarian" },
+  { name: "Vegan", value: "vegan" },
+  { name: "Pescetarian", value: "pescetarian" },
+  { name: "Paleo", value: "paleo" },
+  { name: "Primal", value: "primal" },
+  { name: "Low FODMAP", value: "Low FODMAP" },
+  { name: "Whole30", value: "whole30" },
 ];
 
 export default function Home(props) {
-  let results = useSelector((state) => state.results),
+  const results = useSelector((state) => state.results),
     dispatch = useDispatch(); //Obtengo informacion del estado global.
 
-  let [filter, setFilter] = useState(""),
-    [pagination, setPagination] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1),
+    [recipesPerPage] = useState(9);
 
-  const handleChangeFilters = (event) => {
-    event.preventDefault();
-    if (event.target.value === "asc") {
-      results.sort((a, b) => a.title.localeCompare(b.title));
-      setFilter(event.target.value);
-    }
-    if (event.target.value === "desc") {
-      results.sort((a, b) => b.title.localeCompare(a.title));
-      setFilter(event.target.value);
-    }
-    if (event.target.value === "max") {
-      results.sort((a, b) => b.healthScore - a.healthScore);
-      setFilter(event.target.value);
-    }
-    if (event.target.value === "min") {
-      results.sort((a, b) => a.healthScore - b.healthScore);
-      setFilter(event.target.value);
-    }
-    if (event.target.value === "most") {
-      dispatch(getRecipes());
-      document.getElementsByName("diet").forEach((element) => {
-        element.checked = false;
-      });
-    }
-  };
-
-  const startIndex = (pagination - 1) * 9,
-    endIndex = pagination * 9,
-    totalPage = results.length / 9;
-
-  const handleChangePage = (event) => {
-    // event.preventDefault();
-    if (event.target.value === "next") {
-      setPagination(pagination + 1);
-    }
-    if (event.target.value === "previous") {
-      setPagination(pagination - 1);
-    }
-  };
+  const lastRecipe = currentPage * recipesPerPage,
+    firstRecipe = lastRecipe - recipesPerPage,
+    paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
@@ -74,47 +41,45 @@ export default function Home(props) {
 
   return (
     <div>
-      <h1>Home</h1>
       <SearchBar />
 
-      <h1>Recetas</h1>
-      <div>
-        {results.msg ? (
-          <p>{results.msg}</p>
-        ) : (
-          results
-            .slice(startIndex, endIndex)
-            .map((recipe) => (
-              <Recipe
-                key={recipe.id}
-                id={recipe.id}
-                image={recipe.image}
-                title={recipe.title}
-                diets={recipe.diets}
-                healthScore={recipe.healthScore}
-              />
-            ))
-        )}
+      <div className={style.content}>
+        <div className={style.filterDiets}>
+          <FiltersDiets paginate={paginate} />
+        </div>
+        <div className={style.recipesFilters}>
+          <div className={style.others}>
+            <span>Ordenar Por:</span>
+            <OtherFilters />
+          </div>
+          <section className={style.recipes}>
+            {results.msg ? (
+              <p>{results.msg}</p>
+            ) : (
+              results
+                .slice(firstRecipe, lastRecipe)
+                .map((recipe) => (
+                  <Recipe
+                    key={`R${recipe.id}`}
+                    id={recipe.id}
+                    image={recipe.image}
+                    title={recipe.title}
+                    diets={recipe.diets}
+                    healthScore={recipe.healthScore}
+                  />
+                ))
+            )}
+          </section>
+        </div>
       </div>
-
-      <h2>Dietas</h2>
-      <FiltersDiets />
-
-      <h2>Filtros</h2>
-      <OtherFilters />
-
-      <h2>Paginacion</h2>
-      <h3>Pagina {pagination}</h3>
-      {pagination > 1 && (
-        <button onClick={(e) => handleChangePage(e)} value={"previous"}>
-          {"< Anterior"}
-        </button>
-      )}
-      {pagination < totalPage && (
-        <button onClick={(e) => handleChangePage(e)} value={"next"}>
-          {"Siguiente >"}
-        </button>
-      )}
+      <div>
+        <Pagination
+          recipesPerPage={recipesPerPage}
+          totalRecipes={results.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
+      </div>
     </div>
   );
 }

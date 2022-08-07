@@ -1,21 +1,30 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import style from "./Recipe.module.css";
 
-export default function Recipe({
-  id,
-  image,
-  title,
-  diets,
-  healthScore,
-}) {
+export default function Recipe({ id, image, title, diets, healthScore }) {
   return (
-    <div>
-      <img src={image} alt="Aun No Hay Imagen" />
+    <div className={style.recipe}>
       <NavLink to={`/recipes/detail/${id}`}>
-        <h2>{title}</h2>
+        <div className={style.img_score}>
+          <span className={style.healthScore}>
+            <span className={style.score}>{healthScore}</span>
+            Score
+          </span>
+          <img className={style.img} src={image} alt="Aun No Hay Imagen" />
+        </div>
       </NavLink>
-      <p>{healthScore}</p>
-      {diets && diets.map(diet => (<p>{diet}</p>))}
+      <div className={style.title}>
+        <NavLink to={`/recipes/detail/${id}`}>{title}</NavLink>
+      </div>
+      <div className={style.diets}>
+        {diets &&
+          diets.map((diet, current) => (
+            <span className={style.diet} key={`diet${current}`}>
+              {diet}
+            </span>
+          ))}
+      </div>
     </div>
   );
 }

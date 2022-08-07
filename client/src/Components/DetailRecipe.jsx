@@ -4,26 +4,28 @@ import { useParams } from "react-router-dom";
 import { getRecipe } from "../actions";
 
 export default function DetailRecipe(props) {
-  let { id } = useParams(props); //Obtengo los parametros de la url
+  const { id } = useParams(props), //Obtengo los parametros de la url
+    dispatch = useDispatch(); //Obtengo el dispatch
 
-  let dispatch = useDispatch(); //Obtengo el dispatch
+  let detailRecipe = useSelector((state) => state.detailRecipe); //Obtengo informacion del estado global.
 
   useEffect(() => {
     //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
     dispatch(getRecipe(id));
   }, [id, dispatch]);
 
-  let detailRecipe = useSelector((state) => state.detailRecipe); //Obtengo informacion del estado global.
-
   return (
     <div>
-      <h1>Detalle Receta {id}</h1>
+      <h1>Detalle Receta</h1>
       {detailRecipe ? (
         <div>
           <img src={detailRecipe.image} alt="Aun No Hay Imagen" />
           <h2>{detailRecipe.title}</h2>
           <p>{detailRecipe.dishTypes}</p>
-          {detailRecipe.diets && detailRecipe.diets.map((diet, current) => (<p key={`dt${current}`}>{diet}</p>))}
+          {detailRecipe.diets &&
+            detailRecipe.diets.map((diet, current) => (
+              <p key={`dt${current}`}>{diet}</p>
+            ))}
           <div dangerouslySetInnerHTML={{ __html: detailRecipe.summary }} />
           <p>{detailRecipe.healthScore}</p>
           <div
@@ -34,10 +36,3 @@ export default function DetailRecipe(props) {
     </div>
   );
 }
-
-// {detailRecipe = (
-// <h2>{title}</h2>
-// <h3>{dishTypes}</h3>
-// <p>{summary}</p>
-// <p>{healthScore}</p>
-// <p>{steps}</p>): null}

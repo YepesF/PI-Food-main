@@ -4,7 +4,7 @@ import {
   SET_RECIPE,
   SET_RECIPES,
   SET_RECIPES_NAME,
-  ALL_RECIPES,
+  // ALL_RECIPES,
   SET_DEFAULT_RECIPES,
   SET_OTHER_FILTER,
 } from "../actions";
@@ -13,6 +13,9 @@ const initialState = {
   recipes: [],
   detailRecipe: {},
   results: [],
+  pagination: 1,
+  indexPagination: { start: 0, end: 9 },
+  msg: "",
 };
 
 export default function reducer(state = initialState, action) {
@@ -42,7 +45,12 @@ export default function reducer(state = initialState, action) {
       });
       return {
         ...state,
-        results: [...results],
+        results:
+          results.length === 0
+            ? {
+                msg: `No puedimos encontrar ninguna receta que contenga la dieta ${action.payload}`,
+              }
+            : [...results],
       };
 
     case SET_OTHER_FILTER:
@@ -51,17 +59,17 @@ export default function reducer(state = initialState, action) {
         results: [...action.payload],
       };
 
-    // case CREATE_RECIPE:
-    //   return {
-    //     ...state,
-    //     recipes: [...state.recipes, { ...action.payload }],
-    //   };
+    case SET_RECIPE:
+      return {
+        ...state,
+        detailRecipe: action.payload,
+      };
 
-    // case SET_RECIPE:
-    //   return {
-    //     ...state,
-    //     detailRecipe: action.payload,
-    //   };
+    case CREATE_RECIPE:
+      return {
+        ...state,
+        msg: action.payload.msg,
+      };
 
     default:
       return { ...state };

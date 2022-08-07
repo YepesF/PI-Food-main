@@ -1,0 +1,70 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.flexButton{
+    width: 93%;
+    margin: 4% 1% 4% 1%;
+    padding: 2% 2% 2% 2%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* border:  1px solid var(--boder-color); */
+}
+
+.btn{
+    background-color: transparent;
+    border: 2px solid var(--main-color);
+    color: var(--main-color);
+    font-weight: bold;
+    padding: 5px 35px;
+    border-radius: 30px;
+    transition: transform .4s;
+}
+
+.btn:hover{
+    transform: scale(1.1);
+    background-color: var(--main-color);
+    color: white;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.radio{
+    margin-bottom: 3%;
+    padding: 1% 1% 1% 1%;
+    transition: .3s;
+    cursor: pointer;
+    
+}
+
+.radio:hover{
+    transform: scale(1.1);
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.radio > input[type='radio'] {
+    visibility: hidden;
+}
+
+.radio >input[type='radio']:checked ~ label{
+    color: var(--main-color);
+}
+
+.radio:hover label{
+    color: var(--main-color);
+}
+
+.radio > label{
+    color: white;
+    font-weight: bold;
+    font-size: 100%;
+}
+
+
+

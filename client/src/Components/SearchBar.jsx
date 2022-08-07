@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { getRecipesName, defaultRecepes } from "../actions";
 import { useDispatch } from "react-redux";
 
+import style from "./SearchBar.module.css";
+
 export default function SearchBar() {
   const dispatch = useDispatch();
 
@@ -21,13 +23,14 @@ export default function SearchBar() {
   return (
     <form onSubmit={searchRecipes}>
       <input
+        className={style.search}
         type="text"
-        placeholder="Ingrese la receta a buscar"
+        placeholder="Filet Mignon"
         name={"search"}
         value={search}
         onChange={(e) => handledChange(e)}
       />
-      <input type="submit" value={"Buscar Recetas"} />
+      <input className={style.btn} type="submit" value="" />
     </form>
   );
 }

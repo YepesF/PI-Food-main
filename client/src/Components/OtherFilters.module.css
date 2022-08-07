@@ -1,0 +1,50 @@
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 solid transparent;
+  background: black;
+  background-image: none;
+  color: var(--main-color);
+  flex: 1;
+  padding: 0 0.5em;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.select {
+  position: relative;
+  display: flex;
+  width: 15%;
+  height: 100%;
+  line-height: 3;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 0.25em;
+}
+
+.select::after {
+  content: "\25BC";
+  position: absolute;
+  bottom: 10%;
+  left: 90%;
+  height: 50%;
+  padding-bottom: 8%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: none;
+  transition: 0.25s all ease;
+}
+
+/* .select:hover::after {
+  color: var(--main-color);
+} */

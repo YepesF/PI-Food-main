@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { createRecipe } from "../actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { firtsDiets } from "./Home";
 
 export function validate(recipe) {
@@ -29,6 +29,7 @@ export function validate(recipe) {
   }
 
   if (
+    //eslint-disable-next-line no-useless-escape
     !/^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(
       recipe.image
     )
@@ -40,7 +41,10 @@ export function validate(recipe) {
 }
 
 export default function CreateRecipe() {
-  let [recipe, setRecipe] = useState({
+  const msg = useSelector((state) => state.msg),
+    dispatch = useDispatch();
+
+  const [recipe, setRecipe] = useState({
     title: "",
     summary: "",
     healthScore: 0,
@@ -49,7 +53,7 @@ export default function CreateRecipe() {
     diets: [],
   });
 
-  let [checked, setChecked] = useState({
+  const [checked, setChecked] = useState({
     glutenfree: false,
     ketogenic: false,
     vegetarian: false,
@@ -63,7 +67,7 @@ export default function CreateRecipe() {
     whole30: false,
   });
 
-  let [error, setError] = useState({});
+  const [error, setError] = useState({});
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -93,8 +97,6 @@ export default function CreateRecipe() {
     }
   };
 
-  let dispatch = useDispatch();
-
   const handledSubmit = (event) => {
     event.preventDefault();
     dispatch(createRecipe(recipe));
@@ -121,10 +123,24 @@ export default function CreateRecipe() {
       lowfodmap: false,
       whole30: false,
     });
+
+    setError({});
   };
 
   return (
     <div>
+      {msg.length > 0 && (
+        <div class="alert">
+          <span
+            class="closebtn"
+            onclick="this.parentElement.style.display='none';"
+          >
+            &times;
+          </span>
+          <strong>{msg}</strong>
+        </div>
+      )}
+
       <h1>Crear Receta</h1>
       <form onSubmit={handledSubmit}>
         <div>
@@ -134,7 +150,7 @@ export default function CreateRecipe() {
             name={"title"}
             value={recipe.title}
             onChange={(e) => handleChange(e)}
-            onFocus={(e) => (e.target.placeholder = "Example: Lasagna")}
+            onFocus={(e) => (e.target.placeholder = "Ejemplo: Lasagna")}
             autoFocus
           />
           {error.title && <p>{error.title}</p>}
@@ -198,12 +214,12 @@ export default function CreateRecipe() {
           <div key={`CB${current}`}>
             <input
               type={"checkbox"}
-              name={diet.name}
-              value={diet.value.toLocaleLowerCase()}
-              checked={checked[diet.name]}
+              name={diet.value} //glutenfree
+              value={diet.name.toLocaleLowerCase()} //gluten free
+              checked={checked[diet.value]}
               onChange={(e) => handleChangeDiets(e)}
             />
-            <label>{diet.value}</label>
+            <label>{diet.name}</label>
           </div>
         ))}
 

@@ -82,9 +82,9 @@ router.get("/:idRecipe", async (req, res) => {
     }
 
     if (!recipe)
-      return res
-        .status(404)
-        .send(`No puedimos encontrar ninguna receta con el ID ${idRecipe}`);
+      return res.status(404).send({
+        msg: `No puedimos encontrar ninguna receta con el ID ${idRecipe}`,
+      });
 
     const {
       image,

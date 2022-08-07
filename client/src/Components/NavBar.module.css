@@ -1,0 +1,39 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 45px;
+  padding-left: 8%;
+  padding-right: 8%;
+}
+
+
+.logo {
+    color: white;
+    font-size: 35 px;
+    letter-spacing: 1px;
+}
+
+
+.logo>span{
+    color: var(--main-color);
+}
+
+
+.options > li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 10px 25px;
+}
+
+.options > li > a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.options > li > a:hover {
+  color: var(--main-color);
+  transition: 0.4s;
+}

@@ -1,22 +1,11 @@
 import React, { useState } from "react";
 import { filterDiet, defaultRecepes } from "../actions";
 import { useDispatch } from "react-redux";
+import { firtsDiets } from "./Home";
 
-export const firtsDiets = [
-  { name: "Gluten Free", value: "glutenfree" },
-  { name: "Ketogenic", value: "ketogenic" },
-  { name: "Vegetarian", value: "vegetarian" },
-  { name: "Lacto Vegetarian", value: "lactovegetarian" },
-  { name: "Ovo Vegetarian", value: "ovovegetarian" },
-  { name: "Vegan", value: "vegan" },
-  { name: "Pescetarian", value: "pescetarian" },
-  { name: "Paleo", value: "paleo" },
-  { name: "Primal", value: "primal" },
-  { name: "Low FODMAP", value: "Low FODMAP" },
-  { name: "Whole30", value: "whole30" },
-];
+import style from "./FilterDiets.module.css";
 
-export default function FiltersDiets() {
+export default function FiltersDiets({ paginate }) {
   const dispatch = useDispatch();
 
   const [checked, setChecked] = useState({
@@ -35,6 +24,7 @@ export default function FiltersDiets() {
 
   const handledChange = (event, nameDiet) => {
     // event.preventDefault();
+    paginate(1);
     setChecked(() => {
       return {
         glutenfree: false,
@@ -74,23 +64,28 @@ export default function FiltersDiets() {
   };
 
   return (
-    <div>
+    <div className={style.content}>
+      <div className={style.flexButton}>
+        <button className={style.btn} onClick={clearFilters}>
+          {"Limpiar Filtros"}
+        </button>
+      </div>
+
       {firtsDiets.map((diet, current) => {
         return (
-          <div>
+          <div className={style.radio} key={`DT${current}`}>
             <input
-              key={`DT${current}`}
+              id={diet.value}
               type="radio"
               name="diets"
               value={diet.value}
               onChange={(e) => handledChange(e, diet.name)}
               checked={checked[diet.value]}
             />
-            <label>{diet.name}</label>
+            <label for={diet.value}>{diet.name}</label>
           </div>
         );
       })}
-      <button onClick={clearFilters}>{"Limpiar Filtros"}</button>
     </div>
   );
 }

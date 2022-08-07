@@ -1,0 +1,43 @@
+.content{
+    display: flex;
+    flex-direction: row;
+    padding: 1% 1% 1% 1%;
+
+    /* border:  1px solid var(--boder-color); */
+}
+
+.filterDiets{
+    /* border:  1px solid var(--boder-color); */
+    width: 12%;
+
+    /* color: white; */
+}
+
+.recipesFilters{
+    display: flex;
+    flex-direction: column;
+    margin-left: 1%;
+    width: 100%;
+    padding: 1% 1% 1% 1%;
+    /* border:  1px solid var(--boder-color); */
+}
+
+.others{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1%;
+    padding: 1% 1% 1% 1%;
+
+    color: white;
+    /* border:  1px solid var(--boder-color); */
+}
+
+.others>span{
+    margin-right: 1%;
+}
+
+.recipes{
+    display: flex;
+    flex-wrap: wrap;
+    /* border:  1px solid var(--boder-color); */
+}

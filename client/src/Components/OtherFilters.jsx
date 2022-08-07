@@ -2,6 +2,8 @@ import React from "react";
 import { defaultRecepes, othersFilters } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
 
+import style from "./OtherFilters.module.css";
+
 const otherFilters = [
   { name: "Mas Relevantes", value: "most" },
   { name: "Ascendente", value: "asc" },
@@ -38,8 +40,12 @@ export default function OtherFilters() {
   };
 
   return (
-    <div>
-      <select name="sortBy" onChange={(e) => handledChange(e)}>
+    <div className={style.select}>
+      <select
+        className={style.filters}
+        name="sortBy"
+        onChange={(e) => handledChange(e)}
+      >
         {otherFilters.map((filter, current) => (
           <option key={`FT${current}`} value={filter.value}>
             {filter.name}

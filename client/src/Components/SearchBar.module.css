@@ -1,0 +1,39 @@
+/* *{    
+    color: #E82F3E;
+    color: #191919;
+    color: #fcfc;
+    color: rgba(82, 74, 82, 0.8)
+    color: #FDE700;
+} */
+
+.search{
+    width: 50%;
+    height: 40px;
+    border: 3px solid var(--main-color);
+    border-radius: 30px;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    background: url('../source/search.svg') no-repeat scroll 7px 7px;
+    background-size: 30px;
+    padding-left: 30px;
+    outline: none;    
+}
+
+.btn{
+    background: url('../source/next.png') no-repeat scroll 7px 7px;
+    border: 3px solid transparent;
+    width: 60px;
+    height: 80px;
+    cursor: pointer;
+}
+
+::placeholder{
+    text-align: center;
+    font-size: 25px;
+    color: white;
+}
+
+.search:focus::placeholder{
+    color: transparent;
+}
