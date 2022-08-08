@@ -3,7 +3,7 @@ import { filterDiet, defaultRecepes } from "../actions";
 import { useDispatch } from "react-redux";
 import { firtsDiets } from "./Home";
 
-import style from "./FilterDiets.module.css";
+import style from "./FiltersDiets.module.css";
 
 export default function FiltersDiets({ paginate }) {
   const dispatch = useDispatch();

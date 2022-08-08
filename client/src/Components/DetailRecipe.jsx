@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getRecipe } from "../actions";
 
+import style from "./DetailRecipe.module.css";
+
+// import { health } from "..source/health.png";
+
 export default function DetailRecipe(props) {
   const { id } = useParams(props), //Obtengo los parametros de la url
     dispatch = useDispatch(); //Obtengo el dispatch
@@ -16,21 +20,52 @@ export default function DetailRecipe(props) {
 
   return (
     <div>
-      <h1>Detalle Receta</h1>
+      <img src="../source/next.png" alt="" />
       {detailRecipe ? (
-        <div>
-          <img src={detailRecipe.image} alt="Aun No Hay Imagen" />
-          <h2>{detailRecipe.title}</h2>
-          <p>{detailRecipe.dishTypes}</p>
-          {detailRecipe.diets &&
-            detailRecipe.diets.map((diet, current) => (
-              <p key={`dt${current}`}>{diet}</p>
-            ))}
-          <div dangerouslySetInnerHTML={{ __html: detailRecipe.summary }} />
-          <p>{detailRecipe.healthScore}</p>
+        <div className={style.content}>
+          <h2 className={style.title}>{detailRecipe.title}</h2>
+          <div className={style.contentTwo}>
+            <img src={detailRecipe.image} alt="Aun No Hay Imagen" />
+            <div>
+              <div className={style.healthScore}>
+                <img
+                  src={require("../source/health.png").default}
+                  alt="Health Score"
+                />
+                <p>{detailRecipe.healthScore}</p>
+              </div>
+
+              <div className={style.dishTypes}>
+                <img
+                  src={require("../source/dish.png").default}
+                  alt="Dish Types"
+                />
+                <p>{detailRecipe.dishTypes}</p>
+              </div>
+
+              <div className={style.diets}>
+                <img src={require("../source/diets.png").default} alt="Diets" />
+                <div>
+                  {detailRecipe.diets &&
+                    detailRecipe.diets.map((diet, current) => (
+                      <p className={style.diet} key={`dt${current}`}>
+                        {diet}
+                      </p>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
           <div
-            dangerouslySetInnerHTML={{ __html: detailRecipe.instructions }}
+            className={style.summary}
+            dangerouslySetInnerHTML={{ __html: detailRecipe.summary }}
           />
+          <div className={style.instructions}>
+            <h3>Steps</h3>
+            <div
+              dangerouslySetInnerHTML={{ __html: detailRecipe.instructions }}
+            />
+          </div>
         </div>
       ) : null}
     </div>

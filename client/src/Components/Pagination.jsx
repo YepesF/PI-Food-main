@@ -21,7 +21,10 @@ export default function Pagination({
       {currentPage > 1 && (
         <button
           className={style.prev}
-          onClick={() => paginate(currentPage - 1)}
+          onClick={() => {
+            paginate(currentPage - 1);
+            window.scrollTo(0, 0);
+          }}
         >
           {"< Anterior"}
         </button>
@@ -33,7 +36,10 @@ export default function Pagination({
       {currentPage < Math.ceil(totalRecipes / recipesPerPage) && (
         <button
           className={style.next}
-          onClick={() => paginate(currentPage + 1)}
+          onClick={() => {
+            paginate(currentPage + 1);
+            window.scrollTo(0, 0);
+          }}
         >
           {"Siguiente >"}
         </button>

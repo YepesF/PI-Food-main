@@ -4,6 +4,8 @@ import { createRecipe } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
 import { firtsDiets } from "./Home";
 
+import style from "./CreateRecipe.module.css";
+
 export function validate(recipe) {
   let error = {};
   if (!recipe.title) {
@@ -47,7 +49,7 @@ export default function CreateRecipe() {
   const [recipe, setRecipe] = useState({
     title: "",
     summary: "",
-    healthScore: 0,
+    healthScore: "",
     instructions: "",
     image: "",
     diets: [],
@@ -128,7 +130,7 @@ export default function CreateRecipe() {
   };
 
   return (
-    <div>
+    <div className={style.content}>
       {msg.length > 0 && (
         <div class="alert">
           <span
@@ -141,89 +143,89 @@ export default function CreateRecipe() {
         </div>
       )}
 
-      <h1>Crear Receta</h1>
-      <form onSubmit={handledSubmit}>
-        <div>
-          <label>Titulo</label>
-          <input
-            type={"text"}
-            name={"title"}
-            value={recipe.title}
-            onChange={(e) => handleChange(e)}
-            onFocus={(e) => (e.target.placeholder = "Ejemplo: Lasagna")}
-            autoFocus
-          />
-          {error.title && <p>{error.title}</p>}
-        </div>
-
-        <br />
-
-        <div>
-          <label>Resumen del plato</label>
-          <input
-            type={"text"}
-            name={"summary"}
-            value={recipe.summary}
-            onChange={(e) => handleChange(e)}
-          />
-          {error.summary && <p>{error.summary}</p>}
-        </div>
-
-        <br />
-
-        <div>
-          <label>Nivel de Comida Saludable</label>
-          <input
-            type={"text"}
-            name={"healthScore"}
-            value={recipe.healthScore}
-            onChange={(e) => handleChange(e)}
-          />
-          {error.healthScore && <p>{error.healthScore}</p>}
-        </div>
-
-        <br />
-
-        <div>
-          <label>Paso a paso</label>
-          <input
-            type={"text"}
-            name={"instructions"}
-            value={recipe.instructions}
-            onChange={(e) => handleChange(e)}
-          />
-          {error.instructions && <p>{error.instructions}</p>}
-        </div>
-
-        <br />
-
-        <div>
-          <label>Imagen</label>
-          <input
-            type={"text"}
-            name={"image"}
-            value={recipe.image}
-            onChange={(e) => handleChange(e)}
-          />
-          {error.image && <p>{error.image}</p>}
-        </div>
-
-        <br />
-
-        {firtsDiets.map((diet, current) => (
-          <div key={`CB${current}`}>
+      <h2>
+        Crear <span>Receta</span>
+      </h2>
+      <form className={style.form} onSubmit={handledSubmit}>
+        <div className={style.firstData}>
+          <div>
             <input
-              type={"checkbox"}
-              name={diet.value} //glutenfree
-              value={diet.name.toLocaleLowerCase()} //gluten free
-              checked={checked[diet.value]}
-              onChange={(e) => handleChangeDiets(e)}
+              className={error.title ? style.danger : style.cell}
+              type={"text"}
+              name={"title"}
+              value={recipe.title}
+              onChange={(e) => handleChange(e)}
+              placeholder={"Nombre de la receta"}
             />
-            <label>{diet.name}</label>
+            {error.title && <p>{error.title}</p>}
           </div>
-        ))}
 
-        <br />
+          <div>
+            <input
+              className={error.summary ? style.danger : style.cell}
+              type={"text"}
+              name={"summary"}
+              value={recipe.summary}
+              onChange={(e) => handleChange(e)}
+              placeholder={"Resumen de la receta"}
+            />
+            {error.summary && <p>{error.summary}</p>}
+          </div>
+
+          <div>
+            <input
+              className={error.healthScore ? style.danger : style.cell}
+              type={"text"}
+              name={"healthScore"}
+              value={recipe.healthScore}
+              onChange={(e) => handleChange(e)}
+              placeholder={"Nivel de comida saludable"}
+            />
+            {error.healthScore && <p>{error.healthScore}</p>}
+          </div>
+
+          <div>
+            <input
+              className={error.instructions ? style.danger : style.cell}
+              type={"text"}
+              name={"instructions"}
+              value={recipe.instructions}
+              onChange={(e) => handleChange(e)}
+              placeholder={"Paso a paso de la receta"}
+            />
+            {error.instructions && <p>{error.instructions}</p>}
+          </div>
+
+          <div>
+            <input
+              className={error.image ? style.danger : style.cell}
+              type={"text"}
+              name={"image"}
+              value={recipe.image}
+              onChange={(e) => handleChange(e)}
+              placeholder={"URL de la imagen"}
+            />
+            {error.image && <p>{error.image}</p>}
+          </div>
+        </div>
+
+        <div className={style.diets}>
+          {firtsDiets.map((diet, current) => (
+            <div key={`CB${current}`}>
+              <input
+                id={`CB${current}`}
+                type={"checkbox"}
+                name={diet.value} //glutenfree
+                value={diet.name.toLocaleLowerCase()} //gluten free
+                checked={checked[diet.value]}
+                onChange={(e) => handleChangeDiets(e)}
+              />
+              <label className={style.diet} for={`CB${current}`}>
+                {diet.name}
+              </label>
+            </div>
+          ))}
+        </div>
 
         <div>
           {error.title ||

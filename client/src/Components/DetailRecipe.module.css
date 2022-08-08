@@ -1,0 +1,115 @@
+.content {
+    color: white;
+    /* border: 1px solid red; */
+    padding: 1% 10% 1% 10%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.title{
+    font-size:  2rem;
+    font-weight: bold;
+}
+
+.contentTwo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2% 0 5% 0;
+}
+
+.contentTwo > img{
+    width: 60%;
+    padding-right: 10%;
+}
+
+.healthScore{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-bottom: 10%;
+}
+
+.healthScore > img{
+    width: 15%;
+    height: 15%;
+
+    margin-right: 10%;
+}
+
+.healthScore > p{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.dishTypes{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-bottom: 10%;
+}
+
+.dishTypes > img{
+    width: 15%;
+    height: 21%;
+
+    margin-right: 10%;
+}
+
+.dishTypes > p{
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.diets{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.diets > img{
+    width: 15%;
+    height: 15%;
+
+    margin-right: 10%;
+}
+
+.diets > div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.diet {
+    text-transform: capitalize;
+    padding-right: 10%;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.summary{
+    text-align: justify;
+    font-size: 1.2rem;
+    margin-bottom: 5%;
+}
+
+.summary > a:link{
+    color: var(--main-color);
+}
+
+
+.summary > a:visited{
+    color: #8f840b;
+}
+
+.instructions{
+    text-align: justify;
+    font-size: 1.2rem;
+}
+
+.instructions > h3 {
+    text-align: center;
+}
