@@ -5,7 +5,8 @@ export const CREATE_RECIPE = "CREATE_RECIPE",
   FILTER_DIET = "FILTER_DIET",
   ALL_RECIPES = "ALL_RECIPES",
   SET_OTHER_FILTER = "SET_OTHER_FILTER",
-  SET_DEFAULT_RECIPES = "SET_DEFAULT_RECIPES";
+  SET_DEFAULT_RECIPES = "SET_DEFAULT_RECIPES",
+  CLEAR_MSG = "CLEAR_MSG";
 
 export function getRecipes() {
   return function (dispatch) {
@@ -55,4 +56,8 @@ export function filterDiet(diet) {
 
 export function othersFilters(recipes) {
   return { type: SET_OTHER_FILTER, payload: recipes };
+}
+
+export function clearMSG() {
+  return { type: CLEAR_MSG };
 }

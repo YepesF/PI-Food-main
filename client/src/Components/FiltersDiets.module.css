@@ -48,11 +48,11 @@
     cursor: pointer;
 }
 
-.radio > input[type='radio'] {
+.radio > input {
     visibility: hidden;
 }
 
-.radio >input[type='radio']:checked ~ label{
+.radio >input:checked ~ label{
     color: var(--main-color);
 }
 

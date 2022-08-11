@@ -4,7 +4,7 @@ import {
   SET_RECIPE,
   SET_RECIPES,
   SET_RECIPES_NAME,
-  // ALL_RECIPES,
+  CLEAR_MSG,
   SET_DEFAULT_RECIPES,
   SET_OTHER_FILTER,
 } from "../actions";
@@ -69,6 +69,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         msg: action.payload.msg,
+      };
+
+    case CLEAR_MSG:
+      return {
+        ...state,
+        msg: "",
       };
 
     default:

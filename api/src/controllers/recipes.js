@@ -6,22 +6,27 @@ const { API_KEY1, API_KEY2, API_KEY3 } = process.env;
 const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY3}`;
 
 const findRecipeByNameBD = async (title) => {
-  return (
-    (await Recipe.findOne({
-      where: {
-        title,
-      },
-    })) && {
-      msg: "La receta ya existe, por favor ingresar un nombre receta diferente.",
-    }
-  );
+  try {
+    return (
+      (await Recipe.findOne({
+        where: {
+          title,
+        },
+      })) && {
+        msg: "La receta ya existe, por favor ingresar un nombre receta diferente.",
+      }
+    );
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const createRecipe = async (recipe) => {
-  let { title, summary, healthScore, instructions, diets, image, dishTypes } =
-    recipe;
+  let { title, summary, healthScore, instructions, diets, image } = recipe;
 
-  diets = diets.map((diet) => diet.toLowerCase());
+  if (diets.length > 1) {
+    diets = diets.map((diet) => diet.toLowerCase());
+  }
 
   try {
     const queryDiets = await Diet.findAll({
@@ -44,126 +49,157 @@ const createRecipe = async (recipe) => {
       healthScore,
       instructions,
       image,
-      dishTypes,
     });
 
     await newRecipe.addDiet(queryDiets);
 
     return { msg: "La receta ha sido creada." };
   } catch (error) {
-    return new Error(error.message);
+    throw new Error(error.message);
   }
 };
 
 const getAllRecipesApi = () => {
-  return axios
-    .get(ALL_RECIPES)
-    .then((response) => response.data.results)
-    .catch((err) => err.response.data.message);
+  try {
+    return axios
+      .get(ALL_RECIPES)
+      .then((response) => response.data.results)
+      .catch((err) => err.response.data.message);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getAllRecipesBD = async () => {
-  const queryBD = await Recipe.findAll({
-    include: {
-      model: Diet,
-      attributes: ["name"],
-      through: {
-        attributes: [],
+  try {
+    const queryBD = await Recipe.findAll({
+      include: {
+        model: Diet,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
       },
-    },
-  });
+    });
 
-  return queryBD.map((recipe) => {
-    return {
-      ...recipe.dataValues,
-      diets: recipe.diets.map((diet) => diet.name),
-    };
-  });
+    return queryBD.map((recipe) => {
+      return {
+        ...recipe.dataValues,
+        diets: recipe.diets.map((diet) => diet.name),
+      };
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getAllRecipesApibyName = async (name) => {
-  const recipesAPI = await getAllRecipesApi();
-  return recipesAPI.filter((recipe) => {
-    return recipe.title.toLowerCase().includes(name.toLowerCase());
-  });
+  try {
+    const recipesAPI = await getAllRecipesApi();
+    return recipesAPI.filter((recipe) => {
+      return recipe.title.toLowerCase().includes(name.toLowerCase());
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getAllRecipesBDbyName = async (name) => {
-  const queryBD = await Recipe.findAll({
-    where: {
-      title: { [Op.iLike]: `%${name}%` },
-    },
-    include: {
-      model: Diet,
-      attributes: ["name"],
-      through: {
-        attributes: [],
+  try {
+    const queryBD = await Recipe.findAll({
+      where: {
+        title: { [Op.iLike]: `%${name}%` },
       },
-    },
-  });
+      include: {
+        model: Diet,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
+      },
+    });
 
-  return queryBD.map((recipe) => {
-    return {
-      ...recipe.dataValues,
-      diets: recipe.diets.map((diet) => diet.name),
-    };
-  });
+    return queryBD.map((recipe) => {
+      return {
+        ...recipe.dataValues,
+        diets: recipe.diets.map((diet) => diet.name),
+      };
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getAllRecipesApibyDiet = async (diet) => {
-  const recipesAPI = await getAllRecipesApi();
-  return recipesAPI.filter((recipe) => {
-    return recipe.diets.includes(diet.toLowerCase());
-  });
+  try {
+    const recipesAPI = await getAllRecipesApi();
+    return recipesAPI.filter((recipe) => {
+      return recipe.diets.includes(diet.toLowerCase());
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getAllRecipesBDbyDiet = async (diet) => {
-  const queryBD = await Recipe.findAll({
-    include: {
-      model: Diet,
-      attributes: ["name"],
-      through: {
-        attributes: [],
+  try {
+    const queryBD = await Recipe.findAll({
+      include: {
+        model: Diet,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
+        where: {
+          name: { [Op.iLike]: `%${diet}%` },
+        },
       },
-      where: {
-        name: { [Op.iLike]: `%${diet}%` },
-      },
-    },
-  });
+    });
 
-  return queryBD.map((recipe) => {
-    return {
-      ...recipe.dataValues,
-      diets: recipe.diets.map((diet) => diet.name),
-    };
-  });
+    return queryBD.map((recipe) => {
+      return {
+        ...recipe.dataValues,
+        diets: recipe.diets.map((diet) => diet.name),
+      };
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getRecipeApiById = (id) => {
-  return axios
-    .get(
-      `https://api.spoonacular.com/recipes/${Number(
-        id
-      )}/information?apiKey=${API_KEY1}`
-    )
-    .then((response) => response.data)
-    .catch((err) => null);
+  try {
+    return axios
+      .get(
+        `https://api.spoonacular.com/recipes/${Number(
+          id
+        )}/information?apiKey=${API_KEY1}`
+      )
+      .then((response) => response.data)
+      .catch((err) => null);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const getRecipeBDById = async (id) => {
-  const queryBD = await Recipe.findByPk(id, {
-    include: {
-      model: Diet,
-      attributes: ["name"],
-      through: {
-        attributes: [],
+  try {
+    const queryBD = await Recipe.findByPk(id, {
+      include: {
+        model: Diet,
+        attributes: ["name"],
+        through: {
+          attributes: [],
+        },
       },
-    },
-  });
+    });
 
-  const mapDiets = queryBD.diets.map((diet) => diet.name);
+    const mapDiets = queryBD.diets.map((diet) => diet.name);
 
-  return { ...queryBD.dataValues, diets: mapDiets };
+    return { ...queryBD.dataValues, diets: mapDiets };
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 //==========================================================

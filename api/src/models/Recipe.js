@@ -60,12 +60,9 @@ module.exports = (sequelize) => {
       },
       image: {
         type: DataTypes.TEXT,
-        validate: {
-          isUrl: true,
-        },
-      },
-      dishTypes: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
+        // validate: {
+        //   isUrl: true,
+        // },
       },
     },
     {

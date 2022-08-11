@@ -112,8 +112,7 @@ router.get("/:idRecipe", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { title, summary, healthScore, instructions, diets, image, dishTypes } =
-    req.body;
+  const { title, summary, healthScore, instructions, image, diets } = req.body;
 
   try {
     const error =
@@ -132,7 +131,6 @@ router.post("/", async (req, res) => {
         instructions,
         diets,
         image,
-        dishTypes,
       })
     );
   } catch (error) {

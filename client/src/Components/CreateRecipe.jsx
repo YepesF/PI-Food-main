@@ -1,46 +1,10 @@
-import React from "react";
-import { useState } from "react";
-import { createRecipe } from "../actions";
+import React, { useState } from "react";
+import { createRecipe, clearMSG } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
 import { firtsDiets } from "./Home";
+import { title, summary, healthScore, image } from "../controllers/validators";
 
 import style from "./CreateRecipe.module.css";
-
-export function validate(recipe) {
-  let error = {};
-  if (!recipe.title) {
-    error.title = "El nombre de la recetra es requerido.";
-  } else if (!/^[\w][\w _]*$/.test(recipe.title)) {
-    error.title =
-      "El nombre de la recetra es invalido, recuerda no incluir simbolos, ni espacios al inicio del texto.";
-  }
-
-  if (!recipe.summary) {
-    error.summary = "El resumen de la receta es requerido.";
-  } else if (/^[ _]*$/.test(recipe.summary)) {
-    error.summary =
-      "El resumen de la receta es invalido, no puede contener espacios al inicio del texto.";
-  }
-
-  if (!/^[0-9]*$/.test(recipe.healthScore)) {
-    error.healthScore =
-      "El nivel de comida saludable es invalido, solo se admiten numeros.";
-  } else if (recipe.healthScore > 100 || recipe.healthScore < 0) {
-    error.healthScore =
-      "El nivel de comida saludable no puede ser mayor que 100 ni menor que 0.";
-  }
-
-  if (
-    //eslint-disable-next-line no-useless-escape
-    !/^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(
-      recipe.image
-    )
-  ) {
-    error.image = "La URL de la imagen es invalida.";
-  }
-
-  return error;
-}
 
 export default function CreateRecipe() {
   const msg = useSelector((state) => state.msg),
@@ -49,41 +13,55 @@ export default function CreateRecipe() {
   const [recipe, setRecipe] = useState({
     title: "",
     summary: "",
-    healthScore: "",
+    healthScore: 0,
     instructions: "",
     image: "",
     diets: [],
   });
 
-  const [checked, setChecked] = useState({
-    glutenfree: false,
-    ketogenic: false,
-    vegetarian: false,
-    lactovegetarian: false,
-    ovovegetarian: false,
-    vegan: false,
-    pescetarian: false,
-    paleo: false,
-    primal: false,
-    lowfodmap: false,
-    whole30: false,
-  });
+  const [checked, setChecked] = useState({});
 
   const [error, setError] = useState({});
 
   const handleChange = (event) => {
+    let objError = {};
+
     event.preventDefault();
+
     setRecipe((prev) => ({ ...prev, [event.target.name]: event.target.value }));
 
-    let objError = validate({
-      ...recipe,
-      [event.target.name]: event.target.value,
-    });
+    if (event.target.name === "title") {
+      objError = title({
+        ...recipe,
+        [event.target.name]: event.target.value,
+      });
+    }
+
+    if (event.target.name === "summary") {
+      objError = summary({
+        ...recipe,
+        [event.target.name]: event.target.value,
+      });
+    }
+
+    if (event.target.name === "healthScore") {
+      objError = healthScore({
+        ...recipe,
+        [event.target.name]: event.target.value,
+      });
+    }
+
+    if (event.target.name === "image") {
+      objError = image({
+        ...recipe,
+        [event.target.name]: event.target.value,
+      });
+    }
+
     setError(objError);
   };
 
   const handleChangeDiets = (event) => {
-    // event.preventDefault();
     if (event.target.checked) {
       setRecipe((prev) => ({
         ...prev,
@@ -99,54 +77,58 @@ export default function CreateRecipe() {
     }
   };
 
-  const handledSubmit = (event) => {
+  const handledSubmit = async (event) => {
     event.preventDefault();
-    dispatch(createRecipe(recipe));
 
-    setRecipe({
-      title: "",
-      summary: "",
-      healthScore: 0,
-      instructions: "",
-      image: "",
-      diets: [],
-    });
+    if (!error.healthScore && !error.title && !error.summary && !error.image) {
+      dispatch(createRecipe(recipe));
 
-    setChecked({
-      glutenfree: false,
-      ketogenic: false,
-      vegetarian: false,
-      lactovegetarian: false,
-      ovovegetarian: false,
-      vegan: false,
-      pescetarian: false,
-      paleo: false,
-      primal: false,
-      lowfodmap: false,
-      whole30: false,
-    });
+      setRecipe({
+        title: "",
+        summary: "",
+        healthScore: 0,
+        instructions: "",
+        image: "",
+        diets: [],
+      });
 
-    setError({});
+      setChecked({});
+
+      setError({});
+
+      document.activeElement.blur();
+    }
+  };
+
+  const hide = (e) => {
+    e.preventDefault();
+    dispatch(clearMSG());
   };
 
   return (
     <div className={style.content}>
-      {msg.length > 0 && (
-        <div class="alert">
-          <span
-            class="closebtn"
-            onclick="this.parentElement.style.display='none';"
-          >
-            &times;
+      {/* {
+        <div>
+          <span id="15" className={style.a}>
+            {"0"}
           </span>
-          <strong>{msg}</strong>
+          {a()}
         </div>
-      )}
+      } */}
 
       <h2>
         Crear <span>Receta</span>
       </h2>
       <form className={style.form} onSubmit={handledSubmit}>
+        {msg && (
+          <div id="15" className={style.overlay}>
+            <div className={style.popup}>
+              <div className={style.content2}>{msg}</div>
+              <button onClick={(e) => hide(e)}>{"Aceptar"}</button>
+            </div>
+          </div>
+        )}
+
         <div className={style.firstData}>
           <div>
             <input
@@ -220,7 +202,7 @@ export default function CreateRecipe() {
                 checked={checked[diet.value]}
                 onChange={(e) => handleChangeDiets(e)}
               />
-              <label className={style.diet} for={`CB${current}`}>
+              <label className={style.diet} htmlFor={`CB${current}`}>
                 {diet.name}
               </label>
             </div>
@@ -233,7 +215,11 @@ export default function CreateRecipe() {
           error.healthscore ||
           !recipe.title ||
           !recipe.summary ? null : (
-            <input type={"submit"} value={"Crear Receta"} />
+            <input
+              className={style.btn}
+              type={"submit"}
+              value={"Crear Receta"}
+            />
           )}
         </div>
       </form>
