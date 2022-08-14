@@ -19,8 +19,8 @@ export const firtsDiets = [
   { name: "Pescetarian", value: "pescetarian" },
   { name: "Paleo", value: "paleo" },
   { name: "Primal", value: "primal" },
-  { name: "Low FODMAP", value: "Low FODMAP" },
-  { name: "Whole30", value: "whole30" },
+  { name: "Low FODMAP", value: "lowfodmap" },
+  { name: "Whole 30", value: "whole30" },
 ];
 
 export default function Home(props) {
@@ -28,11 +28,13 @@ export default function Home(props) {
     dispatch = useDispatch(); //Obtengo informacion del estado global.
 
   const [currentPage, setCurrentPage] = useState(1),
-    [recipesPerPage] = useState(9);
+    [recipesPerPage] = useState(9),
+    [checked, setChecked] = useState({});
 
   const lastRecipe = currentPage * recipesPerPage,
     firstRecipe = lastRecipe - recipesPerPage,
-    paginate = (pageNumber) => setCurrentPage(pageNumber);
+    paginate = (pageNumber) => setCurrentPage(pageNumber),
+    checkedDiet = (dietState) => setChecked(dietState);
 
   useEffect(() => {
     //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
@@ -41,11 +43,15 @@ export default function Home(props) {
 
   return (
     <div>
-      <SearchBar />
+      <SearchBar checkedDiet={checkedDiet} paginate={paginate} />
 
       <div className={style.content}>
         <div className={style.filterDiets}>
-          <FiltersDiets paginate={paginate} />
+          <FiltersDiets
+            checked={checked}
+            checkedDiet={checkedDiet}
+            paginate={paginate}
+          />
         </div>
         <div className={style.recipesFilters}>
           <div className={style.others}>
@@ -54,7 +60,7 @@ export default function Home(props) {
           </div>
           <section className={style.recipes}>
             {results.msg ? (
-              <p>{results.msg}</p>
+              <p className={style.error}>{results.msg}</p>
             ) : (
               results
                 .slice(firstRecipe, lastRecipe)

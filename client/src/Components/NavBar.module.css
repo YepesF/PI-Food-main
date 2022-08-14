@@ -19,6 +19,19 @@ nav {
     color: var(--main-color);
 }
 
+.content >  a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.content >  a > h2:hover {
+  color: var(--main-color);
+  transition: 0.4s;
+}
+
+
 
 .options > li {
   list-style-type: none;
@@ -36,4 +49,8 @@ nav {
 .options > li > a:hover {
   color: var(--main-color);
   transition: 0.4s;
+}
+
+.disable {
+  visibility: hidden;
 }

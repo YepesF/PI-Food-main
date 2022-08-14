@@ -13,6 +13,7 @@ const initialState = {
   recipes: [],
   detailRecipe: {},
   results: [],
+  filter: [],
   pagination: 1,
   indexPagination: { start: 0, end: 9 },
   msg: "",
@@ -36,11 +37,12 @@ export default function reducer(state = initialState, action) {
     case SET_RECIPES_NAME:
       return {
         ...state,
-        results: action.payload,
+        results: [...action.payload],
+        filter: [...action.payload],
       };
 
     case FILTER_DIET:
-      const results = state.recipes.filter((recipe) => {
+      const results = state.results.filter((recipe) => {
         return recipe.diets.includes(action.payload) && recipe;
       });
       return {

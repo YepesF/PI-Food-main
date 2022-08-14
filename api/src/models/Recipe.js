@@ -56,7 +56,7 @@ module.exports = (sequelize) => {
         },
       },
       instructions: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       image: {
         type: DataTypes.TEXT,

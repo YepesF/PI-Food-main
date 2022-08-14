@@ -13,7 +13,7 @@ export default function CreateRecipe() {
   const [recipe, setRecipe] = useState({
     title: "",
     summary: "",
-    healthScore: 0,
+    healthScore: null,
     instructions: "",
     image: "",
     diets: [],
@@ -28,7 +28,10 @@ export default function CreateRecipe() {
 
     event.preventDefault();
 
-    setRecipe((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    setRecipe((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
 
     if (event.target.name === "title") {
       objError = title({
@@ -86,7 +89,7 @@ export default function CreateRecipe() {
       setRecipe({
         title: "",
         summary: "",
-        healthScore: 0,
+        healthScore: null,
         instructions: "",
         image: "",
         diets: [],
@@ -96,6 +99,9 @@ export default function CreateRecipe() {
 
       setError({});
 
+      //Limpia todo los inputs
+      event.target.reset();
+      //Desactiva el focus en los inputs
       document.activeElement.blur();
     }
   };
@@ -107,15 +113,6 @@ export default function CreateRecipe() {
 
   return (
     <div className={style.content}>
-      {/* {
-        <div>
-          <span id="15" className={style.a}>
-            {"0"}
-          </span>
-          {a()}
-        </div>
-      } */}
-
       <h2>
         Crear <span>Receta</span>
       </h2>

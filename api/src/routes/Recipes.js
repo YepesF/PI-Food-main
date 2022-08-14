@@ -5,6 +5,7 @@ const {
   validationTitle,
   validationSummary,
   validationHealthScore,
+  validationImage,
 } = require("../controllers/validators");
 const {
   createRecipe,
@@ -113,13 +114,14 @@ router.get("/:idRecipe", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { title, summary, healthScore, instructions, image, diets } = req.body;
-
   try {
+    console.log(validationImage(image));
     const error =
       validationTitle(title) ||
       (await findRecipeByNameBD(title)) ||
       validationSummary(summary) ||
-      validationHealthScore(healthScore);
+      validationHealthScore(healthScore) ||
+      validationImage(image);
 
     if (error) return res.status(400).send(error);
 

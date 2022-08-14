@@ -16,6 +16,7 @@ export default function DetailRecipe(props) {
   useEffect(() => {
     //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
     dispatch(getRecipe(id));
+    window.scrollTo(0, 0);
   }, [id, dispatch]);
 
   return (
@@ -32,7 +33,7 @@ export default function DetailRecipe(props) {
                   src={require("../source/health.png").default}
                   alt="Health Score"
                 />
-                <p>{detailRecipe.healthScore}</p>
+                <p>{`${detailRecipe.healthScore} Points`}</p>
               </div>
 
               <div className={style.dishTypes}>
@@ -61,7 +62,7 @@ export default function DetailRecipe(props) {
             dangerouslySetInnerHTML={{ __html: detailRecipe.summary }}
           />
           <div className={style.instructions}>
-            <h3>Steps</h3>
+            <h3>Instructions</h3>
             <div
               dangerouslySetInnerHTML={{ __html: detailRecipe.instructions }}
             />

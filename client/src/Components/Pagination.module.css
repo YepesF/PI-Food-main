@@ -65,3 +65,25 @@
     border: 2px solid transparent;
     cursor: pointer;
 }
+
+.pagination {
+    display: flex;    
+    justify-content: center;
+
+    padding: 1%;
+}
+
+.page{
+    margin-right: 1%;
+    border: 2px solid var(--main-color);
+    background-color: transparent;
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.page:hover{
+    background-color: var(--main-color);
+    color: white;
+    border: 2px solid transparent;
+    cursor: pointer;
+}

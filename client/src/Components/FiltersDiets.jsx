@@ -5,42 +5,17 @@ import { firtsDiets } from "./Home";
 
 import style from "./FiltersDiets.module.css";
 
-export default function FiltersDiets({ paginate }) {
+export default function FiltersDiets({ checked, checkedDiet, paginate }) {
   const dispatch = useDispatch();
 
-  const [checked, setChecked] = useState({
-    glutenfree: false,
-    ketogenic: false,
-    vegetarian: false,
-    lactovegetarian: false,
-    ovovegetarian: false,
-    vegan: false,
-    pescetarian: false,
-    paleo: false,
-    primal: false,
-    lowfodmap: false,
-    whole30: false,
-  });
+  // const [checked, setChecked] = useState({});
 
   const handledChange = (event, nameDiet) => {
     // event.preventDefault();
     paginate(1);
-    setChecked(() => {
-      return {
-        glutenfree: false,
-        ketogenic: false,
-        vegetarian: false,
-        lactovegetarian: false,
-        ovovegetarian: false,
-        vegan: false,
-        pescetarian: false,
-        paleo: false,
-        primal: false,
-        lowfodmap: false,
-        whole30: false,
-        [event.target.value]: true,
-      };
-    });
+
+    // setChecked({ [event.target.value]: event.target.checked });
+    checkedDiet({ [event.target.value]: event.target.checked });
 
     dispatch(filterDiet(nameDiet.toLowerCase()));
   };
@@ -48,19 +23,8 @@ export default function FiltersDiets({ paginate }) {
   const clearFilters = (event) => {
     event.preventDefault();
     dispatch(defaultRecepes());
-    setChecked({
-      glutenfree: false,
-      ketogenic: false,
-      vegetarian: false,
-      lactovegetarian: false,
-      ovovegetarian: false,
-      vegan: false,
-      pescetarian: false,
-      paleo: false,
-      primal: false,
-      lowfodmap: false,
-      whole30: false,
-    });
+    // setChecked({});
+    checkedDiet({});
   };
 
   return (

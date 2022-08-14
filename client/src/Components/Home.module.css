@@ -41,3 +41,12 @@
     flex-wrap: wrap;
     /* border:  1px solid var(--boder-color); */
 }
+
+.error{
+    
+    width: 100%;
+    padding: 1%;
+    color: var(--main-color);
+    font-size:2rem;
+    text-align: center;
+}

@@ -171,7 +171,7 @@ Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
 
 **IMPORTANTE**: No está permitido utilizar los filtrados, ordenamientos y paginados brindados por la API externa, todas estas funcionalidades tienen que implementarlas ustedes.
 
-- [*] **GET /recipes?name="..."**: **TODO** Es necesario que el resultado sea en orden?
+- [*] **GET /recipes?name="..."**:
   - Obtener un listado de las recetas que contengan la palabra ingresada como query parameter
   - Si no existe ninguna receta mostrar un mensaje adecuado
 - [*] **GET /recipes/{idReceta}**:
@@ -187,6 +187,6 @@ Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
 
 ## Testing
 
-- [ ] Al menos tener un componente del frontend con sus tests respectivos
-- [ ] Al menos tener una ruta del backend con sus tests respectivos
-- [ ] Al menos tener un modelo de la base de datos con sus tests respectivos
+- [*] Al menos tener un componente del frontend con sus tests respectivos
+- [*] Al menos tener una ruta del backend con sus tests respectivos
+- [*] Al menos tener un modelo de la base de datos con sus tests respectivos

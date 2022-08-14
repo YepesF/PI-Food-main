@@ -30,8 +30,8 @@ export default function Pagination({
         </button>
       )}
       <div className={style.pages}>
-        <span className={style.currentPage}>{currentPage}</span> de{" "}
-        {Math.ceil(totalRecipes / recipesPerPage)}
+        <span className={style.currentPage}>{currentPage}</span>
+        {` de ${totalRecipes ? Math.ceil(totalRecipes / recipesPerPage) : 1}`}
       </div>
       {currentPage < Math.ceil(totalRecipes / recipesPerPage) && (
         <button
@@ -45,9 +45,16 @@ export default function Pagination({
         </button>
       )}
     </div>
-    // <div>
+    // <div className={style.pagination}>
     //   {numPages.map((num) => (
-    //     <button key={num} onClick={() => paginate(num)}>
+    //     <button
+    //       className={style.page}
+    //       key={num}
+    //       onClick={() => {
+    //         paginate(num);
+    //         window.scrollTo(0, 0);
+    //       }}
+    //     >
     //       {num}
     //     </button>
     //   ))}

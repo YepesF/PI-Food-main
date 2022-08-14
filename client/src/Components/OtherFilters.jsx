@@ -1,6 +1,7 @@
 import React from "react";
-import { defaultRecepes, othersFilters } from "../actions";
+import { othersFilters } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 import style from "./OtherFilters.module.css";
 
@@ -13,29 +14,40 @@ const otherFilters = [
 ];
 
 export default function OtherFilters() {
-  const recipes = useSelector((state) => state.results),
+  // const recipes = useSelector((state) => state.results),
+  //   dispatch = useDispatch();
+
+  const recipes = useSelector((state) => state.filter),
     dispatch = useDispatch();
 
   const handledChange = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     if (event.target.value === "asc") {
-      const results = recipes.sort((a, b) => a.title.localeCompare(b.title));
+      const results = [...recipes].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
       dispatch(othersFilters(results));
     }
     if (event.target.value === "desc") {
-      const results = recipes.sort((a, b) => b.title.localeCompare(a.title));
+      const results = [...recipes].sort((a, b) =>
+        b.title.localeCompare(a.title)
+      );
       dispatch(othersFilters(results));
     }
     if (event.target.value === "max") {
-      const results = recipes.sort((a, b) => b.healthScore - a.healthScore);
+      const results = [...recipes].sort(
+        (a, b) => b.healthScore - a.healthScore
+      );
       dispatch(othersFilters(results));
     }
     if (event.target.value === "min") {
-      const results = recipes.sort((a, b) => a.healthScore - b.healthScore);
-      dispatch(othersFilters(results));
+      const results = [...recipes].sort(
+        (a, b) => a.healthScore - b.healthScore
+      );
+      dispatch(othersFilters([...results]));
     }
     if (event.target.value === "most") {
-      dispatch(defaultRecepes());
+      dispatch(othersFilters(recipes));
     }
   };
 
@@ -46,11 +58,17 @@ export default function OtherFilters() {
         name="sortBy"
         onChange={(e) => handledChange(e)}
       >
-        {otherFilters.map((filter, current) => (
-          <option key={`FT${current}`} value={filter.value}>
-            {filter.name}
-          </option>
-        ))}
+        {otherFilters.map((filter, current) =>
+          filter.value === "most" ? (
+            <option key={`FT${current}`} selected value={filter.value}>
+              {filter.name}
+            </option>
+          ) : (
+            <option key={`FT${current}`} value={filter.value}>
+              {filter.name}
+            </option>
+          )
+        )}
       </select>
     </div>
   );

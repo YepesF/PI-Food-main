@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import style from "./SearchBar.module.css";
 
-export default function SearchBar() {
+export default function SearchBar({ checkedDiet, paginate }) {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
@@ -12,12 +12,16 @@ export default function SearchBar() {
   const handledChange = (event) => {
     event.preventDefault();
     setSearch(event.target.value);
-    if (event.target.value.length === 0) dispatch(defaultRecepes());
+    event.target.value.length === 0 && dispatch(defaultRecepes());
   };
 
   const searchRecipes = (event) => {
     event.preventDefault();
     dispatch(getRecipesName(search));
+    checkedDiet({});
+    paginate(1);
+    setSearch("");
+    document.activeElement.blur();
   };
 
   return (
