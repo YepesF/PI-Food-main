@@ -1,6 +1,4 @@
 import React from "react";
-import {} from "../actions";
-import {} from "react-redux";
 
 import style from "./Pagination.module.css";
 

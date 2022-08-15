@@ -1,31 +1,37 @@
-import React, { useState } from "react";
-import { filterDiet, defaultRecepes } from "../actions";
-import { useDispatch } from "react-redux";
-import { firtsDiets } from "./Home";
+import React from "react";
+import { filterDiet, defaultRecepes, getDiets } from "../actions";
+import { useDispatch, useSelector } from "react-redux";
 
 import style from "./FiltersDiets.module.css";
+import { useEffect } from "react";
 
-export default function FiltersDiets({ checked, checkedDiet, paginate }) {
-  const dispatch = useDispatch();
-
-  // const [checked, setChecked] = useState({});
+export default function FiltersDiets({
+  checked,
+  checkedDiet,
+  selectedFilter,
+  paginate,
+}) {
+  const diets = useSelector((state) => state.diets),
+    dispatch = useDispatch();
 
   const handledChange = (event, nameDiet) => {
     // event.preventDefault();
     paginate(1);
-
-    // setChecked({ [event.target.value]: event.target.checked });
+    selectedFilter("");
     checkedDiet({ [event.target.value]: event.target.checked });
-
     dispatch(filterDiet(nameDiet.toLowerCase()));
   };
 
   const clearFilters = (event) => {
     event.preventDefault();
     dispatch(defaultRecepes());
-    // setChecked({});
+    selectedFilter("");
     checkedDiet({});
   };
+
+  useEffect(() => {
+    dispatch(getDiets());
+  }, [dispatch]);
 
   return (
     <div className={style.content}>
@@ -35,18 +41,18 @@ export default function FiltersDiets({ checked, checkedDiet, paginate }) {
         </button>
       </div>
 
-      {firtsDiets.map((diet, current) => {
+      {diets.map((diet) => {
         return (
-          <div className={style.radio} key={`DT${current}`}>
+          <div className={style.radio} key={diet.id}>
             <input
-              id={diet.value}
+              id={diet.id}
               type="radio"
               name="diets"
-              value={diet.value}
+              value={diet.name}
               onChange={(e) => handledChange(e, diet.name)}
-              checked={checked[diet.value]}
+              checked={checked[diet.name]}
             />
-            <label for={diet.value}>{diet.name}</label>
+            <label htmlFor={diet.id}>{diet.name}</label>
           </div>
         );
       })}

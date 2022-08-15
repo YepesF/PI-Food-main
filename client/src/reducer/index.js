@@ -1,22 +1,24 @@
 import {
-  CREATE_RECIPE,
-  FILTER_DIET,
-  SET_RECIPE,
   SET_RECIPES,
-  SET_RECIPES_NAME,
-  CLEAR_MSG,
   SET_DEFAULT_RECIPES,
+  SET_RECIPES_NAME,
+  FILTER_DIET,
   SET_OTHER_FILTER,
+  SET_RECIPE,
+  CREATE_RECIPE,
+  CLEAR_MSG,
+  SET_DIETS,
 } from "../actions";
 
 const initialState = {
   recipes: [],
   detailRecipe: {},
   results: [],
-  filter: [],
+  filters: [],
   pagination: 1,
   indexPagination: { start: 0, end: 9 },
   msg: "",
+  diets: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -26,23 +28,25 @@ export default function reducer(state = initialState, action) {
         ...state,
         recipes: [...action.payload],
         results: [...action.payload],
+        filters: [...action.payload],
       };
 
     case SET_DEFAULT_RECIPES:
       return {
         ...state,
         results: [...state.recipes],
+        filters: [...state.recipes],
       };
 
     case SET_RECIPES_NAME:
       return {
         ...state,
         results: [...action.payload],
-        filter: [...action.payload],
+        filters: [...action.payload],
       };
 
     case FILTER_DIET:
-      const results = state.results.filter((recipe) => {
+      const results = [...state.filters].filter((recipe) => {
         return recipe.diets.includes(action.payload) && recipe;
       });
       return {
@@ -77,6 +81,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         msg: "",
+      };
+
+    case SET_DIETS:
+      return {
+        ...state,
+        diets: [...action.payload],
       };
 
     default:

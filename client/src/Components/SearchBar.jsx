@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import style from "./SearchBar.module.css";
 
-export default function SearchBar({ checkedDiet, paginate }) {
+export default function SearchBar({ checkedDiet, selectedFilter, paginate }) {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
@@ -21,6 +21,7 @@ export default function SearchBar({ checkedDiet, paginate }) {
     checkedDiet({});
     paginate(1);
     setSearch("");
+    selectedFilter("");
     document.activeElement.blur();
   };
 

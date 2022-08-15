@@ -13,7 +13,9 @@ export default function NavBar() {
       <ul className={style.options}>
         <li
           className={
-            document.location.pathname === "/recipes/create" && style.disable
+            document.location.pathname === "/recipes/create"
+              ? style.disable
+              : null
           }
         >
           <NavLink to={"/recipes/create"}>Crear Receta</NavLink>

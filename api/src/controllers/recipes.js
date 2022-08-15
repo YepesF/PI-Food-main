@@ -3,7 +3,7 @@ const axios = require("axios");
 const { Op } = require("sequelize");
 const { Recipe, Diet } = require("../db");
 const { API_KEY1, API_KEY2, API_KEY3 } = process.env;
-const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY1}`;
+const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY2}`;
 
 const findRecipeByNameBD = async (title) => {
   try {
@@ -173,7 +173,7 @@ const getRecipeApiById = (id) => {
       .get(
         `https://api.spoonacular.com/recipes/${Number(
           id
-        )}/information?apiKey=${API_KEY1}`
+        )}/information?apiKey=${API_KEY2}`
       )
       .then((response) => response.data)
       .catch((err) => null);

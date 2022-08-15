@@ -45,22 +45,23 @@
 .radio:hover{
     transform: scale(1.1);
     border-radius: 30px;
-    cursor: pointer;
 }
 
 .radio > input {
     visibility: hidden;
 }
 
-.radio >input:checked ~ label{
+.radio > input:checked ~ label{
     color: var(--main-color);
 }
 
 .radio:hover label{
     color: var(--main-color);
+    cursor: pointer;
 }
 
 .radio > label{
+    text-transform: capitalize;
     color: white;
     font-weight: bold;
     font-size: 100%;

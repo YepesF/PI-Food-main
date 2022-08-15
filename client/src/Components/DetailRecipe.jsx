@@ -5,8 +5,6 @@ import { getRecipe } from "../actions";
 
 import style from "./DetailRecipe.module.css";
 
-// import { health } from "..source/health.png";
-
 export default function DetailRecipe(props) {
   const { id } = useParams(props), //Obtengo los parametros de la url
     dispatch = useDispatch(); //Obtengo el dispatch

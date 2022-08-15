@@ -32,11 +32,11 @@ const firtsDiets = [
   "Paleo",
   "Primal",
   "Low FODMAP",
-  "Whole30",
+  "Whole 30",
 ];
 
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ alter: true }).then(() => {
   server.listen(3001, async () => {
     firtsDiets.forEach((diet) => {
       Diet.findOrCreate({

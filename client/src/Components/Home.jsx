@@ -9,32 +9,20 @@ import Pagination from "./Pagination";
 
 import style from "./Home.module.css";
 
-export const firtsDiets = [
-  { name: "Gluten Free", value: "glutenfree" },
-  { name: "Ketogenic", value: "ketogenic" },
-  { name: "Vegetarian", value: "vegetarian" },
-  { name: "Lacto Vegetarian", value: "lactovegetarian" },
-  { name: "Ovo Vegetarian", value: "ovovegetarian" },
-  { name: "Vegan", value: "vegan" },
-  { name: "Pescetarian", value: "pescetarian" },
-  { name: "Paleo", value: "paleo" },
-  { name: "Primal", value: "primal" },
-  { name: "Low FODMAP", value: "lowfodmap" },
-  { name: "Whole 30", value: "whole30" },
-];
-
 export default function Home(props) {
   const results = useSelector((state) => state.results),
     dispatch = useDispatch(); //Obtengo informacion del estado global.
 
   const [currentPage, setCurrentPage] = useState(1),
     [recipesPerPage] = useState(9),
-    [checked, setChecked] = useState({});
+    [checked, setChecked] = useState({}),
+    [selected, setSelected] = useState("");
 
   const lastRecipe = currentPage * recipesPerPage,
     firstRecipe = lastRecipe - recipesPerPage,
     paginate = (pageNumber) => setCurrentPage(pageNumber),
-    checkedDiet = (dietState) => setChecked(dietState);
+    checkedDiet = (dietState) => setChecked(dietState),
+    selectedFilter = (filter) => setSelected(filter);
 
   useEffect(() => {
     //Obtener la informacion una vez cargue la pagina y traiaga la informacion necesaria.
@@ -43,20 +31,25 @@ export default function Home(props) {
 
   return (
     <div>
-      <SearchBar checkedDiet={checkedDiet} paginate={paginate} />
+      <SearchBar
+        checkedDiet={checkedDiet}
+        selectedFilter={selectedFilter}
+        paginate={paginate}
+      />
 
       <div className={style.content}>
         <div className={style.filterDiets}>
           <FiltersDiets
             checked={checked}
             checkedDiet={checkedDiet}
+            selectedFilter={selectedFilter}
             paginate={paginate}
           />
         </div>
         <div className={style.recipesFilters}>
           <div className={style.others}>
             <span>Ordenar Por:</span>
-            <OtherFilters />
+            <OtherFilters selected={selected} selectedFilter={selectedFilter} />
           </div>
           <section className={style.recipes}>
             {results.msg ? (

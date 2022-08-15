@@ -188,6 +188,7 @@
   /* border: 2px solid red; */
 }
 
+
 .diets > div > input{
   visibility: hidden;
 }
@@ -202,10 +203,11 @@
   font-weight: bold;
   font-size: 100%;
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 .diet:hover {
-  color: var(--main-color);
+  color: var(--main-color); 
 }
 
 .btn{

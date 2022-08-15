@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { createRecipe, clearMSG } from "../actions";
+import React, { useEffect, useState } from "react";
+import { createRecipe, clearMSG, getDiets } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
-import { firtsDiets } from "./Home";
 import { title, summary, healthScore, image } from "../controllers/validators";
 
 import style from "./CreateRecipe.module.css";
 
 export default function CreateRecipe() {
   const msg = useSelector((state) => state.msg),
+    diets = useSelector((state) => state.diets),
     dispatch = useDispatch();
 
   const [recipe, setRecipe] = useState({
@@ -111,6 +111,10 @@ export default function CreateRecipe() {
     dispatch(clearMSG());
   };
 
+  useEffect(() => {
+    dispatch(getDiets());
+  }, [dispatch]);
+
   return (
     <div className={style.content}>
       <h2>
@@ -189,17 +193,17 @@ export default function CreateRecipe() {
         </div>
 
         <div className={style.diets}>
-          {firtsDiets.map((diet, current) => (
-            <div key={`CB${current}`}>
+          {diets.map((diet) => (
+            <div key={diet.id}>
               <input
-                id={`CB${current}`}
+                id={diet.id}
                 type={"checkbox"}
-                name={diet.value} //glutenfree
-                value={diet.name.toLocaleLowerCase()} //gluten free
-                checked={checked[diet.value]}
+                name={diet.name}
+                value={diet.name}
+                checked={checked[diet.name]}
                 onChange={(e) => handleChangeDiets(e)}
               />
-              <label className={style.diet} htmlFor={`CB${current}`}>
+              <label className={style.diet} htmlFor={diet.id}>
                 {diet.name}
               </label>
             </div>

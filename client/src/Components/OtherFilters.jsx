@@ -1,53 +1,49 @@
 import React from "react";
 import { othersFilters } from "../actions";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
 
 import style from "./OtherFilters.module.css";
 
 const otherFilters = [
-  { name: "Mas Relevantes", value: "most" },
   { name: "Ascendente", value: "asc" },
   { name: "Descendente", value: "desc" },
   { name: "Health Score Max.", value: "max" },
   { name: "Health Score Min.", value: "min" },
 ];
 
-export default function OtherFilters() {
-  // const recipes = useSelector((state) => state.results),
-  //   dispatch = useDispatch();
-
-  const recipes = useSelector((state) => state.filter),
+export default function OtherFilters({ selected, selectedFilter }) {
+  const recipes = useSelector((state) => state.results),
     dispatch = useDispatch();
 
   const handledChange = (event) => {
     event.preventDefault();
     if (event.target.value === "asc") {
+      selectedFilter(event.target.value);
       const results = [...recipes].sort((a, b) =>
         a.title.localeCompare(b.title)
       );
       dispatch(othersFilters(results));
     }
     if (event.target.value === "desc") {
+      selectedFilter(event.target.value);
       const results = [...recipes].sort((a, b) =>
         b.title.localeCompare(a.title)
       );
       dispatch(othersFilters(results));
     }
     if (event.target.value === "max") {
+      selectedFilter(event.target.value);
       const results = [...recipes].sort(
         (a, b) => b.healthScore - a.healthScore
       );
       dispatch(othersFilters(results));
     }
     if (event.target.value === "min") {
+      selectedFilter(event.target.value);
       const results = [...recipes].sort(
         (a, b) => a.healthScore - b.healthScore
       );
       dispatch(othersFilters([...results]));
-    }
-    if (event.target.value === "most") {
-      dispatch(othersFilters(recipes));
     }
   };
 
@@ -56,19 +52,17 @@ export default function OtherFilters() {
       <select
         className={style.filters}
         name="sortBy"
+        value={selected}
         onChange={(e) => handledChange(e)}
       >
-        {otherFilters.map((filter, current) =>
-          filter.value === "most" ? (
-            <option key={`FT${current}`} selected value={filter.value}>
-              {filter.name}
-            </option>
-          ) : (
-            <option key={`FT${current}`} value={filter.value}>
-              {filter.name}
-            </option>
-          )
-        )}
+        <option defaultValue={""} hidden>
+          Ordenar por
+        </option>
+        {otherFilters.map((filter, current) => (
+          <option key={`FT${current}`} value={filter.value}>
+            {filter.name}
+          </option>
+        ))}
       </select>
     </div>
   );
