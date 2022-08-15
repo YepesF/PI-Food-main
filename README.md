@@ -92,6 +92,13 @@ La idea general es crear una aplicación en la cual se puedan ver distintas rece
 - API_KEY1=d72185a133464f6ea1a0c56941498c72
 - API_KEY2=a193ceb4e1f148809217c13855ec4f94
 - API_KEY3=9b0263ddc8a1401889e51eb1ba76c768
+- API_KEY4=894ee4fbb740469f93d2abaa8b252c5d
+- API_KEY5=67e379d52d1f4b2990f3475fc99f43a6
+- API_KEY6=a3e349ab78e14570a58e6ba2bb8397fc
+- API_KEY7=1fdab5c8c5cd4f80a09a98bc45d1e502
+- API_KEY8=c3425b820a6343379fea0f186f9f83fa
+- API_KEY9=fb6b2631a5224def94c4e328e5fc1c1c
+- API_KEY10=ba338ef0a6fc463aae40647a8f66c3df
 
 ### Requerimientos mínimos
 

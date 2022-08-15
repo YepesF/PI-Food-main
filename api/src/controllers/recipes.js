@@ -2,7 +2,18 @@ require("dotenv").config({ path: "../../.env" });
 const axios = require("axios");
 const { Op } = require("sequelize");
 const { Recipe, Diet } = require("../db");
-const { API_KEY1, API_KEY2, API_KEY3 } = process.env;
+const {
+  API_KEY1,
+  API_KEY2,
+  API_KEY3,
+  API_KEY4,
+  API_KEY5,
+  API_KEY6,
+  API_KEY7,
+  API_KEY8,
+  API_KEY9,
+  API_KEY10,
+} = process.env;
 const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY2}`;
 
 const findRecipeByNameBD = async (title) => {
