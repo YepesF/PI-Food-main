@@ -14,7 +14,7 @@ const {
   API_KEY9,
   API_KEY10,
 } = process.env;
-const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY2}`;
+const ALL_RECIPES = `https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${API_KEY1}`;
 
 const findRecipeByNameBD = async (title) => {
   try {
@@ -184,7 +184,7 @@ const getRecipeApiById = (id) => {
       .get(
         `https://api.spoonacular.com/recipes/${Number(
           id
-        )}/information?apiKey=${API_KEY2}`
+        )}/information?apiKey=${API_KEY1}`
       )
       .then((response) => response.data)
       .catch((err) => null);

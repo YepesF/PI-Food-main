@@ -16,7 +16,8 @@ export default function Home(props) {
   const [currentPage, setCurrentPage] = useState(1),
     [recipesPerPage] = useState(9),
     [checked, setChecked] = useState({}),
-    [selected, setSelected] = useState("");
+    [selected, setSelected] = useState(""),
+    [loading, setLoading] = useState(true);
 
   const lastRecipe = currentPage * recipesPerPage,
     firstRecipe = lastRecipe - recipesPerPage,

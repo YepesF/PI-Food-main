@@ -41,8 +41,8 @@ export default function reducer(state = initialState, action) {
     case SET_RECIPES_NAME:
       return {
         ...state,
-        results: [...action.payload],
-        filters: [...action.payload],
+        results: action.payload,
+        filters: action.payload,
       };
 
     case FILTER_DIET:

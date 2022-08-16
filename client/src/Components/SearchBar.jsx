@@ -17,12 +17,14 @@ export default function SearchBar({ checkedDiet, selectedFilter, paginate }) {
 
   const searchRecipes = (event) => {
     event.preventDefault();
-    dispatch(getRecipesName(search));
-    checkedDiet({});
-    paginate(1);
-    setSearch("");
-    selectedFilter("");
-    document.activeElement.blur();
+    if (search) {
+      dispatch(getRecipesName(search));
+      checkedDiet({});
+      paginate(1);
+      setSearch("");
+      selectedFilter("");
+      document.activeElement.blur();
+    }
   };
 
   return (

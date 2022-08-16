@@ -21,7 +21,8 @@
 }
 
 .contentTwo > img{
-    width: 60%;
+    width: 40rem;
+    height: 30rem;
     padding-right: 10%;
 }
 
@@ -97,12 +98,12 @@
     margin-bottom: 5%;
 }
 
-.summary > a:link{
+.summary  a:link{
     color: var(--main-color);
 }
 
 
-.summary > a:visited{
+.summary  a:visited{
     color: #8f840b;
 }
 
